@@ -1,5 +1,7 @@
 import click
+import requests
 import sqlite3
+import time
 from haversine import haversine
 from datetime import datetime
 from db import init_db
@@ -14,19 +16,77 @@ from flask import (
     current_app,
 )
 
+"""
+TODO: 
+- add in shapefiles
+"""
+
 app = Flask(__name__)
 
 # init_db()  # don't run this here because you'll get duplicates; just run `uv run python db.py` in the terminal once, and drop/recreate as needed
 
+DATABASE = "maps.db"
 
-@app.route("/")
+
+def geocode_place(place_name):
+    """Get lat/lon for a place name using Nominatim"""
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {"q": place_name, "format": "json", "limit": 1}
+    headers = {"User-Agent": "mapsing/1.0"}  # check/understand this
+
+    response = requests.get(url, params=params, headers=headers)
+    time.sleep(1)  # respect rate limit
+
+    if response.json():
+        data = response.json()[0]
+        return float(data["lat"]), float(data["lon"])
+
+    return None, None
+
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    con = sqlite3.connect("maps.db")
-    places = con.execute(
-        "select * from places"
-    ).fetchall()  # without fetchall() we'd just have a sqlite cursor object
+    if request.method == "GET":
+        con = sqlite3.connect(DATABASE)
+        places = con.execute(
+            "select * from places"
+        ).fetchall()  # without fetchall() we'd just have a sqlite cursor object
+        con.close()
+        return render_template("index.html", places=places)
+
+    elif request.method == "POST":
+        place_new = request.form.get("place_new")
+        country_new = request.form.get("country_new")
+        query = place_new + ", " + country_new
+
+        # use nominatim to search for lat/lon based on the user's entered place name/s
+        latlon = geocode_place(query)
+        print(latlon)
+        print(round(latlon[0], 2))
+        print(round(latlon[1], 2))
+        round(latlon[0], 2)
+        round(latlon[1], 2)
+
+        con = sqlite3.connect(DATABASE)
+        places = con.execute(
+            "insert into places (name, country, lat, long) values (?, ?, ?, ?)",
+            (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2)),
+        )
+        con.commit()  # write changes to file/disk
+        con.close()
+
+        return redirect("/")
+        # return render_template("index.html", places=places)
+
+
+@app.route("/delete", methods=["POST"])
+def delete():
+    place_id = request.form.get("place_id")
+    con = sqlite3.connect(DATABASE)
+    con.execute("delete from places where id = ?", place_id)
+    con.commit()
     con.close()
-    return render_template("index.html", places=places)
+    return redirect("/")
 
 
 @app.route("/distance", methods=["GET", "POST"])
@@ -40,7 +100,7 @@ def distance():
             )  # , 'Brisbane')  # can specify a default value (but the html is set to "required" anyway)
             place2 = request.form.get("place2")
 
-        con = sqlite3.connect("maps.db")
+        con = sqlite3.connect(DATABASE)
         # try:
         places = con.execute(
             "select * from places where name = ? or name = ?", (place1, place2)
@@ -63,7 +123,7 @@ def distance():
         )
 
     elif request.method == "GET":
-        con = sqlite3.connect("maps.db")
+        con = sqlite3.connect(DATABASE)
         # try:
         places = con.execute("select * from places").fetchall()
         con.close()
