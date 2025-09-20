@@ -1,0 +1,59 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Brisbane Box",
+                "color": "red"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            153.0,
+                            -27.4
+                        ],
+                        [
+                            153.1,
+                            -27.4
+                        ],
+                        [
+                            153.1,
+                            -27.5
+                        ],
+                        [
+                            153.0,
+                            -27.5
+                        ],
+                        [
+                            153.0,
+                            -27.4
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Brisbane to Gold Coast",
+                "color": "blue"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        153.0251,
+                        -27.4698
+                    ],
+                    [
+                        153.4307,
+                        -28.0167
+                    ]
+                ]
+            }
+        }
+    ]
+}

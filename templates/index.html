@@ -1,26 +1,75 @@
 {% extends "layout.html" %} {% block main %}
-<h1>Places</h1>
+
+<h3>Add a place</h3>
+<form method="post">
+  <input type="text" name="place_new" placeholder="Brisbane, Queensland" />
+  <input type="text" name="country_new" placeholder="Australia" />
+  <button type="submit">Submit</button>
+</form>
+
+<h3>Places</h3>
 <table class="table">
   <thead>
     <th>Name</th>
     <th>Country</th>
     <th>Latitude</th>
     <th>Longitude</th>
+    <th></th>
   </thead>
   <tbody>
     {% for place in places %}
     <tr>
-      <td>{{ place[1] }}</td>
-      <td>{{ place[2] }}</td>
-      <td>{{ place[3] }}</td>
-      <td>{{ place[4] }}</td>
+      {% for i in range(1, 5) %}
+      <td>{{ place[i] }}</td>
+      {% endfor %}
+      <td>
+        <form action="/delete" method="post">
+          <input type="hidden" name="place_id" value="{{ place[0] }}" />
+          <button type="submit" onclick="return confirm('Delete this place?')">
+            Remove
+          </button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-<!-- <ul>
-  {% for place in places %}
-  <li>{{ place }}</li>
-  {% endfor %}
-</ul> -->
+<!-- Map container -->
+<div class="map-container">
+  <div id="map" style="height: 400px"></div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      var map = L.map("map").setView([-27.4698, 153.0251], 10);  // TODO: initialise map to user's IP location
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Load and display the GeoJSON file
+      fetch('/static/test.geojson')
+      .then(response => response.json())
+      .then(data => {
+      L.geoJSON(data, {
+        style: function(feature) {
+        return {color: feature.properties.color};
+      }
+      }).addTo(map).bindPopup(function(layer) {
+        return layer.feature.properties.name;
+    });
+  });
+
+      // add places to map
+      {% for place in places %}
+      L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");
+      {% endfor %}
+
+    } catch (error) {
+      console.error("Map error:", error);
+    }
+  });
+</script>
+
 {% endblock %}
