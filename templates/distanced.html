@@ -1,0 +1,10 @@
+{% extends "layout.html" %} {% block main %}
+<h1>Haversine distance'd</h1>
+{% if dist_hsine %}
+<p>{{ place1 }}: {{ latlon1[0] }}, {{ latlon1[1] }}</p>
+<p>{{ place2 }}: {{ latlon2[0] }}, {{ latlon2[1] }}</p>
+<p>
+  The great circle distance between {{ place1 }} and {{ place2 }} is {{
+  dist_hsine }} km.
+</p>
+{% endif %} {% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %} {% block main %}
+<h1>Places</h1>
+<table class="table">
+  <thead>
+    <th>Name</th>
+    <th>Country</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+  </thead>
+  <tbody>
+    {% for place in places %}
+    <tr>
+      <td>{{ place[1] }}</td>
+      <td>{{ place[2] }}</td>
+      <td>{{ place[3] }}</td>
+      <td>{{ place[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<!-- <ul>
+  {% for place in places %}
+  <li>{{ place }}</li>
+  {% endfor %}
+</ul> -->
+{% endblock %}
