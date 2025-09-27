@@ -1,4 +1,5 @@
 import click
+import json
 import requests
 import sqlite3
 import time
@@ -18,14 +19,36 @@ from flask import (
 
 """
 TODO: 
-- add in shapefiles
+- add/make/draw shapes
+- add points with notes (e.g. a restaurant or forest we'd like to visit)
+- add "start line"
+- add dates to places
+- add place re-ordering
+
+
+
 """
 
 app = Flask(__name__)
 
-# init_db()  # don't run this here because you'll get duplicates; just run `uv run python db.py` in the terminal once, and drop/recreate as needed
+## RESET DB
+## don't run this here because you'll get duplicates; just run `uv run python db.py` in the terminal once, and drop/recreate as needed
+# init_db()
 
 DATABASE = "maps.db"
+
+
+## move this fn (or just the code) inside an /addshape route?
+def build_geojson(shape_id):
+    row = con.execute(
+        "SELECT name, color, geometry FROM shapes WHERE id=?", (shape_id,)
+    ).fetchone()
+
+    return {
+        "type": "Feature",
+        "properties": {"name": row[0], "color": row[1]},
+        "geometry": json.loads(row[2]),  # Just the geometry part
+    }
 
 
 def geocode_place(place_name):
@@ -83,9 +106,67 @@ def index():
 def delete():
     place_id = request.form.get("place_id")
     con = sqlite3.connect(DATABASE)
-    con.execute("delete from places where id = ?", place_id)
+    con.execute(
+        "delete from places where id = ?", (place_id,)
+    )  # must always pass a tuple (or a list), even if only one parameter
     con.commit()
     con.close()
+    return redirect("/")
+
+
+# DELET? SS by /addshape?
+@app.route("/addline")  # methods=[""]
+def add_line():
+    place_id = request.form.get("place_id")
+    con = sqlite3.connect(DATABASE)
+
+    # TODO: create a shapes table to store lines and boxes etc, and query that
+    con.execute("select * from shapes where place_id = ?", (place_id,))
+
+    con.commit()
+    con.close()
+
+    return render_template("endline.html")  # THERE must be a simpler way than this
+
+
+@app.route("/addshape", methods=["POST"])
+def add_shape():
+    shape_name = request.form.get("shape_name")
+    shape_type = request.form.get("shape_type")
+    shape_color = request.form.get("shape_color")
+
+    # TODO use an enum to validate shape type
+    # SHAPE_TYPES = ENUM
+    # if shape_type not in SHAPE_TYPES:
+    # return ...?
+
+    return render_template(
+        "drawshape.html",
+        shape_name=shape_name,
+        shape_type=shape_type,
+        shape_color=shape_color,
+    )
+
+
+@app.route("/saveshape", methods=["POST"])
+def save_shape():
+    shape_name = request.form.get("shape_name")
+    shape_type = request.form.get("shape_type")
+    shape_color = request.form.get("shape_color")
+    geometry = request.form.get("geometry")  # json?
+
+    # TODO validate using enum here or in /addshape?
+
+    shape_geometry = geometry  # TODO this instead: build_geojson(shape_id=)
+
+    con = sqlite3.connect(DATABASE)
+    con.execute(
+        "insert into shapes (name, type, geometry, color) values (?, ?, ?, ?)",
+        (shape_name, shape_type, shape_geometry, shape_color),
+    )
+    con.commit()
+    con.close()
+
     return redirect("/")
 
 

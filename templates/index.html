@@ -1,19 +1,14 @@
 {% extends "layout.html" %} {% block main %}
 
-<h3>Add a place</h3>
-<form method="post">
-  <input type="text" name="place_new" placeholder="Brisbane, Queensland" />
-  <input type="text" name="country_new" placeholder="Australia" />
-  <button type="submit">Submit</button>
-</form>
-
-<h3>Places</h3>
+<h3 class="personal-space">Places</h3>
 <table class="table">
   <thead>
     <th>Name</th>
     <th>Country</th>
     <th>Latitude</th>
     <th>Longitude</th>
+    <th></th>
+    <th></th>
     <th></th>
   </thead>
   <tbody>
@@ -30,12 +25,50 @@
           </button>
         </form>
       </td>
+      <td>
+        <form action="/addline" method="post">
+          <input type="hidden" name="place_id" value="{{ place[0] }}" />
+          <button type="submit">Start line</button>
+        </form>
+      </td>
+      <!-- figure out how to make this disappear until required -->
+      <td>
+        <form action="/endline" method="post">
+          <input type="hidden" name="place_id" value="{{ place[0] }}" />
+          <button type="submit">End line</button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<div class="add-stuff">
+  <!-- i think i need to add action="addplace" but then will need to fix app.py -->
+  <form class="personal-space" method="post">
+    <input type="text" name="place_new" placeholder="Brisbane, Queensland" />
+    <input type="text" name="country_new" placeholder="Australia" />
+    <button type="submit">Add place</button>
+  </form>
+
+  <!-- TODO: hide form input until button is clicked -->
+   <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
+  <form class="personal-space" action="/addshape" method="post">
+    <label>Name</label>
+    <input type="text" name="shape_name" placeholder="ye olde stomping ground" />
+    <select name="shape_type">
+      <option selected disabled>Shape type...</option>
+      <option value="point">Point</option>
+      <option value="linestring">Linestring</option>
+      <option value="polygon">Polygon</option>
+    </select>
+    <input type="text" name="shape_color" placeholder="blue" />
+    <button type="submit">Create shape</button>
+  </form>
+</div>
+
 <!-- Map container -->
-<div class="map-container">
+<div class="personal-space" class="map-container">
   <div id="map" style="height: 400px"></div>
 </div>
 

@@ -1,0 +1,41 @@
+<!-- drawshape.html -->
+<div id="map"></div>
+<form id="saveShapeForm" method="POST" action="/saveshape">
+  <input type="hidden" name="shape_name" value="{{ shape_name }}" />
+  <input type="hidden" name="shape_type" value="{{ shape_type }}" />
+  <input type="hidden" name="shape_color" value="{{ shape_color }}" />
+  <input type="hidden" name="geometry" id="geometryInput" />
+
+  <button type="submit" id="saveBtn" disabled>Save Shape</button>
+  <a href="/">Cancel</a>
+</form>
+
+<script>
+  let map = L.map('map').setView([-27.47, 153.03], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  let drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
+
+  let drawControl = new L.Control.Draw({
+      edit: { featureGroup: drawnItems },
+      draw: {
+          polygon: {{ 'true' if shape_type == 'polygon' else 'false' }},
+          polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
+          rectangle: {{ 'true' if shape_type == 'rectangle' else 'false' }},
+          circle: false,
+          marker: false
+      }
+  });
+  map.addControl(drawControl);
+
+  map.on('draw:created', function(e) {
+      let layer = e.layer;
+      drawnItems.addLayer(layer);
+
+      // Extract geometry and enable save button
+      let geometry = layer.toGeoJSON().geometry;
+      document.getElementById('geometryInput').value = JSON.stringify(geometry);
+      document.getElementById('saveBtn').disabled = false;
+  });
+</script>

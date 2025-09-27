@@ -38,19 +38,79 @@
         {
             "type": "Feature",
             "properties": {
-                "name": "Brisbane to Gold Coast",
+                "name": "Equator1",
+                "color": "purple"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        0,
+                        0
+                    ],
+                    [
+                        180,
+                        0
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Equator2",
+                "color": "purple"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        0,
+                        0
+                    ],
+                    [
+                        -180,
+                        0
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Brisbane to Bali",
                 "color": "blue"
             },
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
                     [
-                        153.0251,
-                        -27.4698
+                        153.03,
+                        -27.47
                     ],
                     [
-                        153.4307,
-                        -28.0167
+                        115.19,
+                        -8.41
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Bali to Bangkok",
+                "color": "blue"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        115.19,
+                        -8.41
+                    ],
+                    [
+                        100.5,
+                        13.76
                     ]
                 ]
             }

@@ -19,3 +19,12 @@ body {
   justify-content: space-between;
   /* align-items: center;  */  /* this breaks the map! */
 }
+
+.personal-space {
+  padding: 24px;
+}
+
+.add-stuff {
+  display: flex;
+  flex-direction: column;
+}

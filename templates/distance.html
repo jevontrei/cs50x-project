@@ -3,14 +3,15 @@
 <p>Calculate the distance between two places, assuming the Earth is a sphere.</p>
 <!-- without an 'action' attribute, the form defaults to the same url -->
 <form method="post">
+  <!-- remove placeholder="From"? -->
   <select name="place1" placeholder="From">
-    <option selected disabled>From</option>
+    <option selected disabled>From...</option>
     {% for place in places %}
     <option value="{{ place[1] }}">{{ place[1] }}</option>
     {% endfor %}
   </select>
   <select name="place2">
-    <option selected disabled>To</option>
+    <option selected disabled>To...</option>
     {% for place in places %}
     <option value="{{ place[1] }}">{{ place[1] }}</option>
     {% endfor %}
