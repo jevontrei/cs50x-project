@@ -8,8 +8,6 @@
     <th>Latitude</th>
     <th>Longitude</th>
     <th></th>
-    <th></th>
-    <th></th>
   </thead>
   <tbody>
     {% for place in places %}
@@ -23,19 +21,6 @@
           <button type="submit" onclick="return confirm('Delete this place?')">
             Remove
           </button>
-        </form>
-      </td>
-      <td>
-        <form action="/addline" method="post">
-          <input type="hidden" name="place_id" value="{{ place[0] }}" />
-          <button type="submit">Start line</button>
-        </form>
-      </td>
-      <!-- figure out how to make this disappear until required -->
-      <td>
-        <form action="/endline" method="post">
-          <input type="hidden" name="place_id" value="{{ place[0] }}" />
-          <button type="submit">End line</button>
         </form>
       </td>
     </tr>
@@ -52,10 +37,14 @@
   </form>
 
   <!-- TODO: hide form input until button is clicked -->
-   <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
   <form class="personal-space" action="/addshape" method="post">
     <label>Name</label>
-    <input type="text" name="shape_name" placeholder="ye olde stomping ground" />
+    <input
+      type="text"
+      name="shape_name"
+      placeholder="ye olde stomping ground"
+    />
     <select name="shape_type">
       <option selected disabled>Shape type...</option>
       <option value="point">Point</option>

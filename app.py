@@ -114,21 +114,6 @@ def delete():
     return redirect("/")
 
 
-# DELET? SS by /addshape?
-@app.route("/addline")  # methods=[""]
-def add_line():
-    place_id = request.form.get("place_id")
-    con = sqlite3.connect(DATABASE)
-
-    # TODO: create a shapes table to store lines and boxes etc, and query that
-    con.execute("select * from shapes where place_id = ?", (place_id,))
-
-    con.commit()
-    con.close()
-
-    return render_template("endline.html")  # THERE must be a simpler way than this
-
-
 @app.route("/addshape", methods=["POST"])
 def add_shape():
     shape_name = request.form.get("shape_name")
