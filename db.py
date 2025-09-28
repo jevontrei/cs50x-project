@@ -4,8 +4,6 @@ import sqlite3
 def init_db():
     con = sqlite3.connect("maps.db")
 
-    # TODO drop table first? to avoid duplicates
-
     # create tables
     # don't need "autoincrement" for PKs in sqlite
     con.execute("""
@@ -31,14 +29,18 @@ def init_db():
                 """)  # each set of () is a new row
 
     con.execute("""
-                create table if not exists shapes (
-                    id integer primary key,
-                    name text,
-                    type text not null,
-                    geometry text,
-                    color text default 'blue'
+                CREATE TABLE if not exists shapes (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                type TEXT,  -- 'point', 'linestring', 'polygon'
+                geometry TEXT,  -- GeoJSON (or rather part thereof? check this)
+                color TEXT,
+                place_id INTEGER,  -- optional; links to parent place (city)
+                category TEXT,  -- 'restaurant', 'route', 'area', etc; include this to enable aggregating, e.g. "all our routes added up to 100000 km"
+                notes TEXT,
+                FOREIGN KEY (place_id) REFERENCES places (id)
                 )
-                """)  # available types: point, linestring, polygon
+                """)
     con.execute("""
                 insert or ignore into shapes (
                     name, type, color, geometry
@@ -58,7 +60,7 @@ def init_db():
                     ]
                 }'
                 ),
-                ('Brisbane line', 'line', 'green',
+                ('Brisbane line', 'linestring', 'green',
                 '{
                     "type": "LineString",
                     "coordinates": [

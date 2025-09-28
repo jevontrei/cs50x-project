@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block main %}
 
 <h3 class="personal-space">Places</h3>
+
 <table class="table">
   <thead>
     <th>Name</th>
@@ -31,8 +32,8 @@
 <div class="add-stuff">
   <!-- i think i need to add action="addplace" but then will need to fix app.py -->
   <form class="personal-space" method="post">
-    <input type="text" name="place_new" placeholder="Brisbane, Queensland" />
-    <input type="text" name="country_new" placeholder="Australia" />
+    <input type="text" name="place_new" placeholder="brisbane, queensland" />
+    <input type="text" name="country_new" placeholder="australia" />
     <button type="submit">Add place</button>
   </form>
 
@@ -57,36 +58,66 @@
 </div>
 
 <!-- Map container -->
-<div class="personal-space" class="map-container">
+<div class="map-container">
+  <!-- https://leafletjs.com/examples/quick-start/ -->
+  <!-- map needs a height or it won't show -->
   <div id="map" style="height: 400px"></div>
 </div>
 
 <script>
+  // the "DOMContentLoaded" listener waits for ALL divs to be created before running the js, no matter where the script is
   document.addEventListener("DOMContentLoaded", function () {
     try {
+      // initialise leaflet map
+      // L is the "global Leaflet namespace object"
+      // var map = L.map(idOfMapDiv).setView([viewCoords], zoomLevel);
       var map = L.map("map").setView([-27.4698, 153.0251], 10);  // TODO: initialise map to user's IP location
 
+      // actually add map
+      // most tile servers require attribution (including OSM)
+      // url template becomes e.g. https://a.tile.openstreetmap.org/10/512/256.png
+      // {s} = a, b, or c for load balancing; {z} = zoom level, {x}/{y} = coords
+      // L.tileLayer("TileLayerUrlTemplate", {attribution: 'copyrightStuff'}).addTo(map);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
+        // maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      // Load and display the GeoJSON file
-      fetch('/static/test.geojson')
-      .then(response => response.json())
-      .then(data => {
-      L.geoJSON(data, {
-        style: function(feature) {
-        return {color: feature.properties.color};
-      }
-      }).addTo(map).bindPopup(function(layer) {
-        return layer.feature.properties.name;
-    });
-  });
+      // "Make sure all the code is called after the div and leaflet.js inclusion" (taken care of in layout.html)
 
-      // add places to map
+      // Load and display the GeoJSON file
+      // fetch() returns a promise
+      // .then() always returns a promise
+      fetch('/static/test.geojson')  // load my test geojson file; returns a response object
+      .then(response => response.json())  // convert fetch() response object body text to js object (a data structure in memory), not json (a text format); the actual data is still structured according to geojson spec
+      .then(data => {
+        // geoJSON() parses geojson data / creates a geojson layer
+        L.geoJSON(data, {
+          style: function(feature) {
+            return {color: feature.properties.color};
+          }
+        }).addTo(map).bindPopup(function(layer) {  // bindPopup() enables clicking behaviour/interactivity; `layer` automatically refers to the individual feature layer that was clicked; the one just created with geoJSON()
+          return layer.feature.properties.name;  // this just shows the name of a thing when the user clicks on it
+        });
+      });
+
+      // add each place to map
       {% for place in places %}
-      L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");
+        // L.marker([xCoord, yCoord]).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
+        L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");  //bindPopup() here just shows the place name
       {% endfor %}
+
+
+      // CLICK TO ADD MARKER (simple test for learning)
+      map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // add marker immediately
+        L.marker([lat, lng]).addTo(map).bindPopup("temporary place: " + lat.toFixed(3) + ", " + lng.toFixed(3))
+
+      })
+
 
     } catch (error) {
       console.error("Map error:", error);

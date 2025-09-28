@@ -31,11 +31,12 @@ TODO:
 
 app = Flask(__name__)
 
-## RESET DB
-## don't run this here because you'll get duplicates; just run `uv run python db.py` in the terminal once, and drop/recreate as needed
-# init_db()
-
 DATABASE = "maps.db"
+
+## DB operations
+## don't run these in this script; just run the commands in the terminal
+## uv run python db.py        # Create tables and seed data
+## uv run python reset_db.py  # When you need fresh start
 
 
 ## move this fn (or just the code) inside an /addshape route?
@@ -52,13 +53,24 @@ def build_geojson(shape_id):
 
 
 def geocode_place(place_name):
-    """Get lat/lon for a place name using Nominatim"""
+    """
+    Get lat/lon for a place by name ("Nominatim"), AKA geocoding
+
+    https://nominatim.org/release-docs/develop/api/Search/
+
+    https://medium.com/@adri.espejo/getting-started-with-openstreetmap-nominatim-api-e0da5a95fc8a
+    https://nominatim.openstreetmap.org/search/<query>?<params>
+    https://nominatim.openstreetmap.org/search?q=<query><params>
+
+    """
     url = "https://nominatim.openstreetmap.org/search"
     params = {"q": place_name, "format": "json", "limit": 1}
-    headers = {"User-Agent": "mapsing/1.0"}  # check/understand this
+    headers = {"User-Agent": "Mapsing/1.0"}  # check/understand this
 
     response = requests.get(url, params=params, headers=headers)
-    time.sleep(1)  # respect rate limit
+    time.sleep(
+        1
+    )  # respect rate limit; "No heavy uses (an absolute maximum of 1 request per second)."
 
     if response.json():
         data = response.json()[0]

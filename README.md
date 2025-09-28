@@ -1,9 +1,9 @@
 
-# YOUR PROJECT TITLE
+# Mapsing
 
-#### Video Demo:  <URL HERE>
+## Video Demo:  <URL HERE>
 
-#### Description:
+## Description:
 
 TODO: 
 - add/make/draw shapes
@@ -12,3 +12,17 @@ TODO:
 - add dates to places
 - add place re-ordering
 - 
+
+
+### PLACES and SHAPES
+
+Places:
+-  major places we are visiting (cities)
+-  
+
+Shapes:
+-  sub-places
+-  points of interest
+-  routes between places
+-  points, lines, polygons
+-  
