@@ -41,6 +41,7 @@ def init_db():
                 FOREIGN KEY (place_id) REFERENCES places (id)
                 )
                 """)
+    # TODO: find if/where "Brisbane line" is appearing on the map
     con.execute("""
                 insert or ignore into shapes (
                     name, type, color, geometry

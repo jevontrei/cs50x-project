@@ -211,3 +211,6 @@ __marimo__/
 
 # uv
 uv.lock
+
+# scratch file/s
+scratch.js
