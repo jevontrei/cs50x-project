@@ -26,6 +26,11 @@ TODO:
 - add place re-ordering
 
 
+## DB operations
+## don't run these in this script; just run the commands in the terminal
+## uv run python db.py        # Create tables and seed data
+## uv run python db_reset.py  # When you need fresh start
+
 
 """
 
@@ -33,13 +38,8 @@ app = Flask(__name__)
 
 DATABASE = "maps.db"
 
-## DB operations
-## don't run these in this script; just run the commands in the terminal
-## uv run python db.py        # Create tables and seed data
-## uv run python reset_db.py  # When you need fresh start
 
-
-## move this fn (or just the code) inside an /addshape route?
+## TODO move this fn (or just the code) inside drawshape route?
 def build_geojson(shape_id):
     row = con.execute(
         "SELECT name, color, geometry FROM shapes WHERE id=?", (shape_id,)
@@ -67,6 +67,8 @@ def geocode_place(place_name):
     params = {"q": place_name, "format": "json", "limit": 1}
     headers = {"User-Agent": "Mapsing/1.0"}  # check/understand this
 
+    # TODO: add error handling bc if you search nonsense, it will crash. TypeError
+
     response = requests.get(url, params=params, headers=headers)
     time.sleep(
         1
@@ -86,8 +88,15 @@ def index():
         places = con.execute(
             "select * from places"
         ).fetchall()  # without fetchall() we'd just have a sqlite cursor object
+        shapes = con.execute("select * from shapes").fetchall()
         con.close()
-        return render_template("index.html", places=places)
+
+        # Convert tuples to lists and parse geometry
+        shapes = [list(shape) for shape in shapes]
+        for shape in shapes:
+            shape[3] = json.loads(shape[3])  # Convert JSON string to dict
+
+        return render_template("index.html", places=places, shapes=shapes)
 
     elif request.method == "POST":
         place_new = request.form.get("place_new")
@@ -95,7 +104,19 @@ def index():
         query = place_new + ", " + country_new
 
         # use nominatim to search for lat/lon based on the user's entered place name/s
-        latlon = geocode_place(query)
+        # TODO: figure out how to error-handle / validate this properly
+        success = False
+        while not success:
+            # try:
+            latlon = geocode_place(query)
+            if latlon:
+                success = True
+        # except TypeError as e:
+        # print("error!", e)
+        # validate output
+        # if not latlon:
+
+        # TODO: delete? what is this?
         print(latlon)
         print(round(latlon[0], 2))
         print(round(latlon[1], 2))
@@ -103,6 +124,7 @@ def index():
         round(latlon[1], 2)
 
         con = sqlite3.connect(DATABASE)
+        # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         places = con.execute(
             "insert into places (name, country, lat, long) values (?, ?, ?, ?)",
             (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2)),
@@ -126,8 +148,8 @@ def delete():
     return redirect("/")
 
 
-@app.route("/addshape", methods=["POST"])
-def add_shape():
+@app.route("/drawshape", methods=["POST"])
+def draw_shape():
     shape_name = request.form.get("shape_name")
     shape_type = request.form.get("shape_type")
     shape_color = request.form.get("shape_color")
@@ -152,7 +174,7 @@ def save_shape():
     shape_color = request.form.get("shape_color")
     geometry = request.form.get("geometry")  # json?
 
-    # TODO validate using enum here or in /addshape?
+    # TODO validate using enum here or in /drawshape?
 
     shape_geometry = geometry  # TODO this instead: build_geojson(shape_id=)
 
@@ -185,6 +207,8 @@ def distance():
         ).fetchall()  # this returns a list of tuples
 
         # calc distance between places; haversine gets us the "great circle distance", i.e. it takes into account the shape of the earth
+        # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
+
         latlon1 = (places[0][3], places[0][4])
         latlon2 = (places[1][3], places[1][4])
 

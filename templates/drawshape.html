@@ -1,5 +1,18 @@
-<!-- drawshape.html -->
-<div id="map"></div>
+{% extends "layout.html" %} {% block main %}
+
+<!-- 
+page for drawing stuff on map, then save to db and redirect back to index with new shape 
+-->
+
+<h3 class="personal-space">Draw shape</h3>
+
+<!-- Map container -->
+<div class="map-container">
+  <!-- https://leafletjs.com/examples/quick-start/ -->
+  <!-- map needs a height or it won't show -->
+  <div id="map" style="height: 400px"></div>
+</div>
+
 <form id="saveShapeForm" method="POST" action="/saveshape">
   <input type="hidden" name="shape_name" value="{{ shape_name }}" />
   <input type="hidden" name="shape_type" value="{{ shape_type }}" />
@@ -11,31 +24,59 @@
 </form>
 
 <script>
-  let map = L.map('map').setView([-27.47, 153.03], 10);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      // create leaflet map
+      let map = L.map('map').setView([-27.47, 153.03], 10);
 
-  let drawnItems = new L.FeatureGroup();
-  map.addLayer(drawnItems);
+      // add map to page
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        // maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
 
-  let drawControl = new L.Control.Draw({
+      // Load and display the GeoJSON file
+      fetch('/static/backup/test.geojson')
+      .then(response => response.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: function(feature) {
+            return {color: feature.properties.color};
+          }
+        }).addTo(map).bindPopup(function(layer) {
+          return layer.feature.properties.name;
+        });
+      });
+
+      let drawnItems = new L.FeatureGroup();
+      map.addLayer(drawnItems);
+
+      // don't need an event listener; L.Control.Draw() takes care of it
+      let drawControl = new L.Control.Draw({
       edit: { featureGroup: drawnItems },
       draw: {
-          polygon: {{ 'true' if shape_type == 'polygon' else 'false' }},
-          polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
-          rectangle: {{ 'true' if shape_type == 'rectangle' else 'false' }},
-          circle: false,
-          marker: false
+        polygon: {{ 'true' if shape_type == 'polygon' else 'false' }},
+        polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
+        rectangle: {{ 'true' if shape_type == 'rectangle' else 'false' }},
+        circle: false,
+        marker: false
       }
-  });
-  map.addControl(drawControl);
+      });
+      map.addControl(drawControl);
+      // TODO: comment/understand all this 
+      map.on('draw:created', function(e) {
+        let layer = e.layer;
+        drawnItems.addLayer(layer);
 
-  map.on('draw:created', function(e) {
-      let layer = e.layer;
-      drawnItems.addLayer(layer);
-
-      // Extract geometry and enable save button
-      let geometry = layer.toGeoJSON().geometry;
-      document.getElementById('geometryInput').value = JSON.stringify(geometry);
-      document.getElementById('saveBtn').disabled = false;
-  });
+        // Extract geometry and enable save button
+        let geometry = layer.toGeoJSON().geometry;
+        document.getElementById('geometryInput').value = JSON.stringify(geometry);
+        document.getElementById('saveBtn').disabled = false;
+      });
+    } catch (error) {
+      console.error("Map error:", error)
+    }
+  })
 </script>
+
+{% endblock %}

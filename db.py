@@ -1,10 +1,11 @@
+import json
 import sqlite3
 
 
 def init_db():
     con = sqlite3.connect("maps.db")
 
-    # create tables
+    # create places table
     # don't need "autoincrement" for PKs in sqlite
     con.execute("""
                 create table if not exists places (
@@ -15,19 +16,19 @@ def init_db():
                     long real
                 )
                 """)
-    # seed
-    con.execute("""
-                insert or ignore into places (
-                    name, country, lat, long
-                )
-                values 
-                ('Brisbane', 'Australia', -27.47, 153.03),
-                ('Bali', 'Indonesia', -8.41, 115.19),
-                ('Bangkok', 'Thailand', 13.76, 100.50),
-                ('Negombo', 'Sri Lanka', 7.21, 79.85),
-                ('Hong Kong', 'Hong Kong', 22.29, 114.12)
-                """)  # each set of () is a new row
+    # seed places
+    with open("static/seedPlaces.json", "r") as f:
+        place_seeds = json.load(f)
+        for place in place_seeds:
+            con.execute(
+                """
+                INSERT OR IGNORE INTO places (name, country, lat, long)
+                VALUES (?, ?, ?, ?)
+                """,
+                (place["name"], place["country"], place["lat"], place["long"]),
+            )
 
+    # create shapes table
     con.execute("""
                 CREATE TABLE if not exists shapes (
                 id INTEGER PRIMARY KEY,
@@ -41,38 +42,27 @@ def init_db():
                 FOREIGN KEY (place_id) REFERENCES places (id)
                 )
                 """)
-    # TODO: find if/where "Brisbane line" is appearing on the map
-    con.execute("""
-                insert or ignore into shapes (
-                    name, type, color, geometry
-                )
-                values
-                ('Brisbane domain', 'polygon', 'red', 
-                '{
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [153.0, -27.4],
-                            [153.1, -27.4],
-                            [153.1, -27.5],
-                            [153.0, -27.5],
-                            [153.0, -27.4]
-                        ]
-                    ]
-                }'
-                ),
-                ('Brisbane line', 'linestring', 'green',
-                '{
-                    "type": "LineString",
-                    "coordinates": [
-                        [0,   0],
-                        [180, 0]
-                    ]
-                }'
-                )
-                """)
 
-    con.commit()  # write changes to file/disk
+    # seed shapes
+    with open("static/seedShapes.json", "r") as f:
+        shape_seeds = json.load(f)
+        # TODO: find if/where "Brisbane line" is appearing on the map
+        # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
+        for shape in shape_seeds:
+            con.execute(
+                """
+                INSERT INTO shapes (name, type, geometry, color)
+                VALUES (?, ?, ?, ?)
+                 """,
+                (
+                    shape["name"],
+                    shape["type"],
+                    json.dumps(shape["geometry"]),  # Convert dict back to JSON string
+                    shape["color"],
+                ),
+            )
+
+    con.commit()  # write all changes to file/disk
     con.close()
 
 

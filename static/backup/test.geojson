@@ -114,6 +114,66 @@
                     ]
                 ]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Bangkok to Negombo",
+                "color": "blue"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        100.5,
+                        13.76
+                    ],
+                    [
+                        79.85,
+                        7.21
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Negombo to Hong Kong",
+                "color": "blue"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        79.85,
+                        7.21
+                    ],
+                    [
+                        114.12,
+                        22.29
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Hong Kong to Brisbane",
+                "color": "blue"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        114.12,
+                        22.29
+                    ],
+                    [
+                        153.03,
+                        -27.47
+                    ]
+                ]
+            }
         }
     ]
 }

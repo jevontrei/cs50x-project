@@ -1,9 +1,17 @@
 {% extends "layout.html" %} {% block main %}
 
+<!-- Map container -->
+<div class="map-container">
+  <!-- https://leafletjs.com/examples/quick-start/ -->
+  <!-- map needs a height or it won't show -->
+  <div id="map" style="height: 400px"></div>
+</div>
+
 <h3 class="personal-space">Places</h3>
 
 <table class="table">
   <thead>
+    <th>ID</th>
     <th>Name</th>
     <th>Country</th>
     <th>Latitude</th>
@@ -13,7 +21,7 @@
   <tbody>
     {% for place in places %}
     <tr>
-      {% for i in range(1, 5) %}
+      {% for i in range(0, 5) %}
       <td>{{ place[i] }}</td>
       {% endfor %}
       <td>
@@ -29,40 +37,103 @@
   </tbody>
 </table>
 
-<div class="add-stuff">
-  <!-- i think i need to add action="addplace" but then will need to fix app.py -->
-  <form class="personal-space" method="post">
-    <input type="text" name="place_new" placeholder="brisbane, queensland" />
-    <input type="text" name="country_new" placeholder="australia" />
-    <button type="submit">Add place</button>
-  </form>
+<!-- <div class="add-stuff">
+</div> -->
+<!-- i think i need to add action="addplace" but then will need to fix app.py -->
+<form class="personal-space" method="post">
+  <input type="text" name="place_new" placeholder="brisbane, queensland" />
+  <input type="text" name="country_new" placeholder="australia" />
+  <button type="submit">Add place</button>
+</form>
 
-  <!-- TODO: hide form input until button is clicked -->
-  <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
-  <form class="personal-space" action="/addshape" method="post">
+<h3 class="personal-space">Shapes</h3>
+
+<table class="table">
+  <thead>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Parent place</th>
+    <th>Category</th>
+    <th>Notes</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for shape in shapes %}
+    <tr>
+      {# {% for i in range(1, 5) %} #} {#
+      <td>{{ shape[i] }}</td>
+      #}
+      <td>{{ shape[1] }}</td>
+      <td>{{ shape[2] }}</td>
+      <td>{{ shape[5] }}</td>
+      <td>{{ shape[6] }}</td>
+      <td>{{ shape[7] }}</td>
+      {# {% endfor %} #}
+      <td>
+        <form action="/delete" method="post">
+          <input type="hidden" name="shape_id" value="{{ shape[0] }}" />
+          <button type="submit" onclick="return confirm('Delete this shape?')">
+            Remove
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h4 class="personal-space">Add a shape</h4>
+<!-- TODO: hide form input until button is clicked -->
+<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
+<form class="add-stuff" action="/drawshape" method="post">
+
+  <div class="form-pair">
     <label>Name</label>
     <input
-      type="text"
-      name="shape_name"
-      placeholder="ye olde stomping ground"
+    required
+    type="text"
+    name="shape_name"
+    placeholder="ye olde stomping ground"
     />
-    <select name="shape_type">
-      <option selected disabled>Shape type...</option>
-      <option value="point">Point</option>
+  </div>
+  
+  <div class="form-pair">
+    <label>Shape type</label>
+    <select required name="shape_type">
+      <!-- do i need value="point" here? -->
+      <option selected value="point">Point</option>
       <option value="linestring">Linestring</option>
       <option value="polygon">Polygon</option>
     </select>
-    <input type="text" name="shape_color" placeholder="blue" />
-    <button type="submit">Create shape</button>
-  </form>
+  </div>
+  
+  <div class="form-pair">
+    <label>Color (optional)</label>
+    <input required type="text" name="shape_color" value="blue" placeholder="blue" />
+  </div>
+  
+  <div class="form-pair">
+    <label>Parent place ID (optional)</label>
+    <select name="parent_place_id" />
+    <option selected disabled>optional</option>
+    {% for place in places %}
+    <option value="point">Point</option>
+    {% endfor %}
+  </select>
 </div>
 
-<!-- Map container -->
-<div class="map-container">
-  <!-- https://leafletjs.com/examples/quick-start/ -->
-  <!-- map needs a height or it won't show -->
-  <div id="map" style="height: 400px"></div>
-</div>
+<div class="form-pair">
+    <label>Category (optional)</label>
+    <input type="text" name="category" placeholder="restaurant" />
+  </div>
+
+  <div class="form-pair">
+    <label>Notes (optional)</label>
+    <input type="text" name="notes" placeholder="recommended by Mo" />
+  </div>
+
+  <button type="submit">Create shape</button>
+</form>
 
 <script>
   // the "DOMContentLoaded" listener waits for ALL divs to be created before running the js, no matter where the script is
@@ -71,6 +142,7 @@
       // initialise leaflet map
       // L is the "global Leaflet namespace object"
       // var map = L.map(idOfMapDiv).setView([viewCoords], zoomLevel);
+      // use let instead of var?
       var map = L.map("map").setView([-27.4698, 153.0251], 10);  // TODO: initialise map to user's IP location
 
       // actually add map
@@ -85,39 +157,27 @@
 
       // "Make sure all the code is called after the div and leaflet.js inclusion" (taken care of in layout.html)
 
-      // Load and display the GeoJSON file
-      // fetch() returns a promise
-      // .then() always returns a promise
-      fetch('/static/test.geojson')  // load my test geojson file; returns a response object
-      .then(response => response.json())  // convert fetch() response object body text to js object (a data structure in memory), not json (a text format); the actual data is still structured according to geojson spec
-      .then(data => {
-        // geoJSON() parses geojson data / creates a geojson layer
-        L.geoJSON(data, {
-          style: function(feature) {
-            return {color: feature.properties.color};
-          }
-        }).addTo(map).bindPopup(function(layer) {  // bindPopup() enables clicking behaviour/interactivity; `layer` automatically refers to the individual feature layer that was clicked; the one just created with geoJSON()
-          return layer.feature.properties.name;  // this just shows the name of a thing when the user clicks on it
-        });
-      });
+      // TODO migrate test.geojson to db init
 
       // add each place to map
       {% for place in places %}
         // L.marker([xCoord, yCoord]).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
+        // pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");  //bindPopup() here just shows the place name
       {% endfor %}
 
-
-      // CLICK TO ADD MARKER (simple test for learning)
-      map.on('click', function(e) {
-        var lat = e.latlng.lat;
-        var lng = e.latlng.lng;
-
-        // add marker immediately
-        L.marker([lat, lng]).addTo(map).bindPopup("temporary place: " + lat.toFixed(3) + ", " + lng.toFixed(3))
-
-      })
-
+      // TODO: why aren't my shapes showing on map?
+      // add each shape to map
+      {% for shape in shapes %}
+        // L.geoJSON(geometry?).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
+        L.geoJSON({{ shape[3] | tojson }}, {
+          style: {
+            color: "{{ shape[4] }}"
+          }
+        })
+        .addTo(map)
+        .bindPopup("{{ shape[1] }}");
+      {% endfor %}
 
     } catch (error) {
       console.error("Map error:", error);
