@@ -13,7 +13,9 @@ def init_db():
                     name text not null,
                     country text,
                     lat real,
-                    long real
+                    long real,
+                    start_date,
+                    end_date
                 )
                 """)
     # seed places
@@ -22,10 +24,10 @@ def init_db():
         for place in place_seeds:
             con.execute(
                 """
-                INSERT OR IGNORE INTO places (name, country, lat, long)
-                VALUES (?, ?, ?, ?)
+                INSERT OR IGNORE INTO places (name, country, lat, long, start_date, end_date)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (place["name"], place["country"], place["lat"], place["long"]),
+                (place["name"], place["country"], place["lat"], place["long"], place.get("start_date"), place.get("end_date")),
             )
 
     # create shapes table
