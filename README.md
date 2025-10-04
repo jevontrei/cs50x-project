@@ -8,7 +8,7 @@ Author: Joel von Treifeldt
 ## TODO
 - add POI with notes (e.g. a restaurant or forest we'd like to visit)
 - add place re-ordering
--
+- responsive design - mobile!
 
 ## Tech / resources used
 
@@ -20,7 +20,6 @@ Author: Joel von Treifeldt
 - Leaflet.js, to get Open Street Maps happening
 - Leaflet.draw, to enable drawing shapes on the map
 - Nominatim, for searching for coordinates using place names
-- haversine, for calculating the distance between two places
 - uv, for environment management
 - git, for version control
 - Netlify, for deploying the site
@@ -56,9 +55,6 @@ A map is
 
 Search
 
-### Distance calculator
-
-There is also a distance calculator page, which simply takes two places and returns the distance between them. Since the Earth is a sphere, I use the "haversine distance", i.e. the distance between two points around a sphere's surface
 
 ---
 
@@ -74,15 +70,12 @@ There is also a distance calculator page, which simply takes two places and retu
 
 `/saveshape`
 
-`/distance`
-
-`/distanced`
 
 ---
 
 ## How To
 
-Ensure you have the `maps.db` file. If not, run:
+Ensure you have sqlite3 installed. Create the `maps.db` file:
 ```bash
 sqlite3 maps.db
 ```

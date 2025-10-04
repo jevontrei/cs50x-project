@@ -218,3 +218,8 @@ scratch.js
 # personal stuff
 /private
 maps_actual.db
+maps.db
+/backup
+/archive
+test.geojson
+loadTestGeojson.js

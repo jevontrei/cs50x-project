@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: cornsilk;
+  /* background-color: cornsilk; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,6 +15,7 @@ body {
 
 .map-container {
   padding: 24px;
+  /* border-radius: 16px; */
 }
 
 .container {
@@ -28,11 +29,18 @@ body {
   padding: 24px;
 }
 
+h4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .add-stuff-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 24px;
+  width: 1000px;
 }
 
 .add-stuff {
@@ -50,4 +58,30 @@ body {
 
 .table {
   padding: 24px;
+}
+
+input {
+  border-radius: 16px;
+  padding: 6px;
+}
+
+label {
+  padding: 6px;
+}
+
+button {
+  border-radius: 16px;
+  padding: 6px;
+  max-width: 300px;
+}
+
+select {
+  border-radius: 16px;
+  padding: 6px;
+}
+
+.form-pair {
+  margin: 6px;
+  display: flex;
+  justify-content: center;
 }
