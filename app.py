@@ -74,13 +74,19 @@ def index():
         ).fetchall()  # without fetchall() we'd just have a sqlite cursor object
         shapes = con.execute("select * from shapes").fetchall()
         con.close()
+        
+        # make a dict of place names to use in the index.html Places table (via FKs)
+        place_names = dict()
+        for place in places:
+            place_names[place[0]] = place[1]
+        print(place_names)
 
         # Convert tuples to lists and parse geometry
         shapes = [list(shape) for shape in shapes]
         for shape in shapes:
             shape[3] = json.loads(shape[3])  # Convert JSON string to dict
 
-        return render_template("index.html", places=places, shapes=shapes)
+        return render_template("index.html", places=places, place_names=place_names, shapes=shapes)
 
     elif request.method == "POST":
         place_new = request.form.get("place_new")
