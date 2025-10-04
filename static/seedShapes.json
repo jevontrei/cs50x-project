@@ -1,0 +1,216 @@
+[
+    {
+        "name": "Seattle domain",
+        "type": "polygon",
+        "color": "red",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        -122.3,
+                        47.6
+                    ],
+                    [
+                        -122.2,
+                        47.6
+                    ],
+                    [
+                        -122.2,
+                        47.5
+                    ],
+                    [
+                        -122.3,
+                        47.5
+                    ],
+                    [
+                        -122.3,
+                        47.6
+                    ]
+                ]
+            ]
+        },
+        "place_id": 1,
+        "category": "region of interest"
+    },
+    {
+        "name": "Shibuya",
+        "type": "polygon",
+        "color": "purple",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [
+                        139.696,
+                        35.658
+                    ],
+                    [
+                        139.704,
+                        35.658
+                    ],
+                    [
+                        139.704,
+                        35.652
+                    ],
+                    [
+                        139.696,
+                        35.652
+                    ],
+                    [
+                        139.696,
+                        35.658
+                    ]
+                ]
+            ]
+        },
+        "place_id": 2,
+        "notes": "shopping district to explore!"
+    },
+    {
+        "name": "Prime Meridian 0-90",
+        "type": "linestring",
+        "color": "purple",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    90
+                ]
+            ]
+        },
+        "notes": "interesting geographic feature"
+    },
+    {
+        "name": "Prime Meridian 0 to -90",
+        "type": "linestring",
+        "color": "purple",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    -90
+                ]
+            ]
+        }
+    },
+    {
+        "name": "Seattle to Tokyo",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    -122.33,
+                    47.61
+                ],
+                [
+                    139.65,
+                    35.68
+                ]
+            ]
+        }
+    },
+    {
+        "name": "Tokyo to Seoul",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    139.65,
+                    35.68
+                ],
+                [
+                    126.98,
+                    37.57
+                ]
+            ]
+        },
+        "category": "route"
+    },
+    {
+        "name": "Seoul to Hanoi",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    126.98,
+                    37.57
+                ],
+                [
+                    105.85,
+                    21.03
+                ]
+            ]
+        }
+    },
+    {
+        "name": "Hanoi to Singapore",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    105.85,
+                    21.03
+                ],
+                [
+                    103.82,
+                    1.35
+                ]
+            ]
+        }
+    },
+    {
+        "name": "Singapore to Dubai",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    103.82,
+                    1.35
+                ],
+                [
+                    55.27,
+                    25.20
+                ]
+            ]
+        }
+    },
+    {
+        "name": "Dubai to Seattle",
+        "type": "linestring",
+        "color": "blue",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [
+                    55.27,
+                    25.20
+                ],
+                [
+                    -122.33,
+                    47.61
+                ]
+            ]
+        }
+    }
+]

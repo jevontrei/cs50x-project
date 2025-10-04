@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Seattle",
+    "country": "United States",
+    "lat": 47.61,
+    "long": -122.33,
+    "end_date": "2025-07-15"
+  },
+  {
+    "name": "Tokyo",
+    "country": "Japan",
+    "lat": 35.68,
+    "long": 139.65,
+    "start_date": "2025-07-15",
+    "end_date": "2025-07-22"
+  },
+  {
+    "name": "Seoul",
+    "country": "South Korea",
+    "lat": 37.57,
+    "long": 126.98,
+    "start_date": "2025-07-22",
+    "end_date": "2025-07-28"
+  },
+  {
+    "name": "Hanoi",
+    "country": "Vietnam",
+    "lat": 21.03,
+    "long": 105.85,
+    "start_date": "2025-07-28",
+    "end_date": "2025-08-04"
+  },
+  {
+    "name": "Singapore",
+    "country": "Singapore",
+    "lat": 1.35,
+    "long": 103.82,
+    "start_date": "2025-08-04",
+    "end_date": "2025-08-09"
+  },
+  {
+    "name": "Dubai",
+    "country": "United Arab Emirates",
+    "lat": 25.20,
+    "long": 55.27,
+    "start_date": "2025-08-09",
+    "end_date": "2025-08-09"
+  },
+  {
+    "name": "Seattle",
+    "country": "United States",
+    "lat": 47.61,
+    "long": -122.33,
+    "start_date": "2025-08-10"
+  }
+]
