@@ -13,19 +13,41 @@ body {
   /* align-items: center; */
 }
 
+.map-container {
+  padding: 24px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* align-items: center;  */  /* this breaks the map! */
+  /* align-items: center;  */ /* this breaks the map! */
 }
 
 .personal-space {
   padding: 24px;
 }
 
+.add-stuff-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
 .add-stuff {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* .add-shape {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+} */
+
+.table {
   padding: 24px;
 }

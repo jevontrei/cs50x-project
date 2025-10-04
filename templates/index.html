@@ -4,83 +4,91 @@
 <div class="map-container">
   <!-- https://leafletjs.com/examples/quick-start/ -->
   <!-- map needs a height or it won't show -->
-  <div id="map" style="height: 400px"></div>
+  <div id="map" style="height: 600px"></div>
 </div>
 
-<h3 class="personal-space">Places</h3>
+<div class="places">
 
-<table class="table">
-  <thead>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Country</th>
-    <th>Latitude</th>
-    <th>Longitude</th>
-    <th>Start date</th>
-    <th>End date</th>
-    <th></th>
-  </thead>
-  <tbody>
-    {% for place in places %}
-    <tr>
-      {% for i in range(0, 7) %}
-      <td>{{ place[i] | default('', true) }}</td>
+  <h3 class="personal-space">Places</h3>
+
+  <table class="table">
+    <thead>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Country</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th></th>
+    </thead>
+    <tbody>
+      {% for place in places %}
+      <tr>
+        {% for i in range(0, 7) %}
+        <td>{{ place[i] | default('', true) }}</td>
+        {% endfor %}
+        <td>
+          <form action="/deleteplace" method="post">
+            <input type="hidden" name="place_id" value="{{ place[0] }}" />
+            <button type="submit" onclick="return confirm('Delete this place?')">
+              Remove
+            </button>
+          </form>
+        </td>
+      </tr>
       {% endfor %}
-      <td>
-        <form action="/deleteplace" method="post">
-          <input type="hidden" name="place_id" value="{{ place[0] }}" />
-          <button type="submit" onclick="return confirm('Delete this place?')">
-            Remove
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
 
-<h4 class="personal-space">Add a place</h4>
 
-<!-- <div class="add-stuff">
-</div> -->
-<!-- i think i need to add action="/addplace" but then will need to fix app.py -->
-<form class="add-stuff" method="post">
+  <!-- <div class="add-place"> -->
+  <div class="add-stuff">
 
+    
+    <h4 class="personal-space">Add a place</h4>
+    
+    <form class="add-stuff-form" method="post">
+      
+      <div class="form-pair">
+        <label>Place name</label>
+        <input required type="text" name="place_new" placeholder="brisbane, queensland" />
+      </div>
+      
+      <div class="form-pair">
+        <label>Country (optional)</label>
+        <input type="text" name="country_new" placeholder="australia" />
+      </div>
+    
     <div class="form-pair">
-      <label>Place name</label>
-      <input required type="text" name="place_new" placeholder="brisbane, queensland" />
-    </div>
-
-    <div class="form-pair">
-      <label>Country (optional)</label>
-      <input type="text" name="country_new" placeholder="australia" />
-    </div>
-
-    <div class="form-pair">
-      <label>From date (optional)</label>
-      <input type="text" name="start_date_new" placeholder="2026-01-04" />
-    </div>
-
-    <div class="form-pair">
-      <label>To date (optional)</label>
-      <input type="text" name="end_date_new" placeholder="2026-02-27" />
-    </div>
-
-  <button type="submit">Do it</button>
-
-</form>
-
-<h3 class="personal-space">Shapes</h3>
-
-<!-- TODO show blank "" instead of None, e.g. for Category -->
-<table class="table">
-  <thead>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Parent place</th>
-    <th>Category</th>
-    <th>Notes</th>
-    <th></th>
+        <label>From date (optional)</label>
+        <input type="text" name="start_date_new" placeholder="2026-01-04" />
+      </div>
+      
+      <div class="form-pair">
+        <label>To date (optional)</label>
+        <input type="text" name="end_date_new" placeholder="2026-02-27" />
+      </div>
+      
+      <button type="submit">Do it</button>
+      
+    </form>
+  </div>
+</div>
+  <div class="shapes">
+    
+  
+  <h3 class="personal-space">Shapes</h3>
+  
+  <!-- TODO show blank "" instead of None, e.g. for Category -->
+  <table class="table">
+    <thead>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Parent place</th>
+      <th>Category</th>
+      <th>Notes</th>
+      <th></th>
   </thead>
   <tbody>
     {% for shape in shapes %}
@@ -101,62 +109,67 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
+  </table>
 
-<h4 class="personal-space">Add a shape</h4>
+  <!-- <div class="add-shape"> -->
+  <div class="add-stuff">
 
-<!-- TODO: hide form input until button is clicked -->
-<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
-<form class="add-stuff" action="/drawshape" method="post">
-
-  <div class="form-pair">
-    <label>Shape name</label>
-    <input
-    required
-    type="text"
-    name="shape_name"
-    placeholder="ye olde stomping ground"
-    />
-  </div>
-  
-  <!-- do i need value="point" here? -->
-  <div class="form-pair">
-    <label>Shape type</label>
-    <select required name="shape_type">
-      <option selected value="point">Point</option>
-      <option value="linestring">Linestring</option>
-      <option value="polygon">Polygon</option>
+    <h4 class="personal-space">Add a shape</h4>
+    
+    <!-- TODO: hide form input until button is clicked -->
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
+    <form class="add-stuff-form" action="/drawshape" method="post">
+      
+      <div class="form-pair">
+        <label>Shape name</label>
+        <input
+        required
+        type="text"
+        name="shape_name"
+        placeholder="ye olde stomping ground"
+        />
+      </div>
+      
+      <!-- do i need value="point" here? -->
+      <div class="form-pair">
+      <label>Shape type</label>
+      <select required name="shape_type">
+        <option selected value="point">Point</option>
+        <option value="linestring">Linestring</option>
+        <option value="polygon">Polygon</option>
+      </select>
+    </div>
+    
+    <div class="form-pair">
+      <label>Color (optional)</label>
+      <input required type="text" name="shape_color" value="blue" placeholder="blue" />
+    </div>
+    
+    <div class="form-pair">
+      <label>Parent place ID (optional)</label>
+      <!-- TODO ensure this behaves properly as optional -->
+      <select name="shape_parent_place_id" />
+      <option selected disabled></option>
+      {% for place in places %}
+      <option value="{{ place[0] }}">{{ place[1] }}</option>
+      {% endfor %}
     </select>
   </div>
   
   <div class="form-pair">
-    <label>Color (optional)</label>
-    <input required type="text" name="shape_color" value="blue" placeholder="blue" />
-  </div>
-  
-  <div class="form-pair">
-    <label>Parent place ID (optional)</label>
-    <!-- TODO ensure this behaves properly as optional -->
-    <select name="shape_parent_place_id" />
-    <option selected disabled></option>
-    {% for place in places %}
-    <option value="{{ place[0] }}">{{ place[1] }}</option>
-    {% endfor %}
-  </select>
-</div>
-
-<div class="form-pair">
     <label>Category (optional)</label>
     <input type="text" name="shape_category" placeholder="restaurant" />
   </div>
-
+  
   <div class="form-pair">
     <label>Notes (optional)</label>
     <input type="text" name="shape_notes" placeholder="recommended by Mo" />
   </div>
-
+  
   <button type="submit">Do it</button>
 </form>
+</div>
+</div>
 
 <script>
   // the "DOMContentLoaded" listener waits for ALL divs to be created before running the js, no matter where the script is
@@ -167,7 +180,7 @@
       // var map = L.map(idOfMapDiv).setView([viewCoords], zoomLevel);
       // use let instead of var?
       var map = L.map("map").setView([-27.4698, 153.0251], 10);  // TODO: initialise map to user's IP location
-
+      
       // actually add map
       // most tile servers require attribution (including OSM)
       // url template becomes e.g. https://a.tile.openstreetmap.org/10/512/256.png
@@ -177,7 +190,7 @@
         // maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
-
+      
       // "Make sure all the code is called after the div and leaflet.js inclusion" (taken care of in layout.html)
 
       // add each place to map
