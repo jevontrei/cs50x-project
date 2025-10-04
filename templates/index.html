@@ -24,7 +24,7 @@
     {% for place in places %}
     <tr>
       {% for i in range(0, 7) %}
-      <td>{{ place[i] }}</td>
+      <td>{{ place[i] | default('', true) }}</td>
       {% endfor %}
       <td>
         <form action="/deleteplace" method="post">
@@ -87,16 +87,9 @@
     <tr>
       <td>{{ shape[1] }}</td>
       <td>{{ shape[2] }}</td>
-      <td>{{ shape[5] }}</td>
-      <td>{{ shape[6] }}</td>
-      <td>{{ shape[7] }}</td>
-      {# 
-      <td>{{ shape["name"] }}</td>
-      <td>{{ shape["type"] }}</td>
-      <td>{{ shape["place_id"] }}</td>
-      <td>{{ shape["category"] }}</td>
-      <td>{{ shape["notes"] }}</td>
-      #}
+      <td>{{ shape[5] | default('', true) }}</td>
+      <td>{{ shape[6] | default('', true) }}</td>
+      <td>{{ shape[7] | default('', true) }}</td>
       <td>
         <form action="/deleteshape" method="post">
           <input type="hidden" name="shape_id" value="{{ shape[0] }}" />
