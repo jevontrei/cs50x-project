@@ -5,6 +5,7 @@ page for drawing stuff on map, then save to db and redirect back to index with n
 -->
 
 <h3 class="personal-space">Draw shape</h3>
+<p>Tip: select drawing tool (on left) to start</p>
 
 <!-- Map container -->
 <div class="map-container">
@@ -17,6 +18,13 @@ page for drawing stuff on map, then save to db and redirect back to index with n
   <input type="hidden" name="shape_name" value="{{ shape_name }}" />
   <input type="hidden" name="shape_type" value="{{ shape_type }}" />
   <input type="hidden" name="shape_color" value="{{ shape_color }}" />
+  <input
+    type="hidden"
+    name="shape_parent_place_id"
+    value="{{ shape_parent_place_id }}"
+  />
+  <input type="hidden" name="shape_category" value="{{ shape_category }}" />
+  <input type="hidden" name="shape_notes" value="{{ shape_notes }}" />
   <input type="hidden" name="geometry" id="geometryInput" />
 
   <button type="submit" id="saveBtn" disabled>Save Shape</button>
@@ -35,18 +43,7 @@ page for drawing stuff on map, then save to db and redirect back to index with n
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      // Load and display the GeoJSON file
-      fetch('/static/backup/test.geojson')
-      .then(response => response.json())
-      .then(data => {
-        L.geoJSON(data, {
-          style: function(feature) {
-            return {color: feature.properties.color};
-          }
-        }).addTo(map).bindPopup(function(layer) {
-          return layer.feature.properties.name;
-        });
-      });
+      // TODO add places to map (shapes already added somehow?)
 
       let drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
@@ -63,7 +60,7 @@ page for drawing stuff on map, then save to db and redirect back to index with n
       }
       });
       map.addControl(drawControl);
-      // TODO: comment/understand all this 
+      // TODO: comment/understand all this
       map.on('draw:created', function(e) {
         let layer = e.layer;
         drawnItems.addLayer(layer);

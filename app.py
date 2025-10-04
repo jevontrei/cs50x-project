@@ -136,8 +136,9 @@ def index():
         # return render_template("index.html", places=places)
 
 
-@app.route("/delete", methods=["POST"])
-def delete():
+# TODO remove button not working
+@app.route("/deleteplace", methods=["POST"])
+def deleteplace():
     place_id = request.form.get("place_id")
     con = sqlite3.connect(DATABASE)
     con.execute(
@@ -148,11 +149,26 @@ def delete():
     return redirect("/")
 
 
+# TODO remove button not working
+@app.route("/deleteshape", methods=["POST"])
+def deleteshape():
+    shape_id = request.form.get("shape_id")
+    con = sqlite3.connect(DATABASE)
+    con.execute("delete from shapes where id = ?", (shape_id,))
+    con.commit()
+    con.close()
+    return redirect("/")
+
+
 @app.route("/drawshape", methods=["POST"])
 def draw_shape():
     shape_name = request.form.get("shape_name")
     shape_type = request.form.get("shape_type")
     shape_color = request.form.get("shape_color")
+    # geometry = request.form.get("geometry")?
+    shape_parent_place_id = request.form.get("shape_parent_place_id")
+    shape_category = request.form.get("shape_category")
+    shape_notes = request.form.get("shape_notes")
 
     # TODO use an enum to validate shape type
     # SHAPE_TYPES = ENUM
@@ -164,6 +180,10 @@ def draw_shape():
         shape_name=shape_name,
         shape_type=shape_type,
         shape_color=shape_color,
+        shape_parent_place_id=shape_parent_place_id,
+        shape_category=shape_category,
+        shape_notes=shape_notes,
+        # geometry=geometry,?
     )
 
 
@@ -172,6 +192,9 @@ def save_shape():
     shape_name = request.form.get("shape_name")
     shape_type = request.form.get("shape_type")
     shape_color = request.form.get("shape_color")
+    shape_parent_place_id = request.form.get("shape_parent_place_id")
+    shape_category = request.form.get("shape_category")
+    shape_notes = request.form.get("shape_notes")
     geometry = request.form.get("geometry")  # json?
 
     # TODO validate using enum here or in /drawshape?
@@ -180,8 +203,16 @@ def save_shape():
 
     con = sqlite3.connect(DATABASE)
     con.execute(
-        "insert into shapes (name, type, geometry, color) values (?, ?, ?, ?)",
-        (shape_name, shape_type, shape_geometry, shape_color),
+        "insert into shapes (name, type, geometry, color, place_id, category, notes) values (?, ?, ?, ?, ?, ?, ?)",
+        (
+            shape_name,
+            shape_type,
+            shape_geometry,
+            shape_color,
+            shape_parent_place_id,
+            shape_category,
+            shape_notes,
+        ),
     )
     con.commit()
     con.close()

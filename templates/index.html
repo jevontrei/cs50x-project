@@ -16,16 +16,18 @@
     <th>Country</th>
     <th>Latitude</th>
     <th>Longitude</th>
+    <th>Start date</th>
+    <th>End date</th>
     <th></th>
   </thead>
   <tbody>
     {% for place in places %}
     <tr>
-      {% for i in range(0, 5) %}
+      {% for i in range(0, 7) %}
       <td>{{ place[i] }}</td>
       {% endfor %}
       <td>
-        <form action="/delete" method="post">
+        <form action="/deleteshape" method="post">
           <input type="hidden" name="place_id" value="{{ place[0] }}" />
           <button type="submit" onclick="return confirm('Delete this place?')">
             Remove
@@ -37,17 +39,40 @@
   </tbody>
 </table>
 
+<h4 class="personal-space">Add a place</h4>
+
 <!-- <div class="add-stuff">
 </div> -->
 <!-- i think i need to add action="addplace" but then will need to fix app.py -->
-<form class="personal-space" method="post">
-  <input type="text" name="place_new" placeholder="brisbane, queensland" />
-  <input type="text" name="country_new" placeholder="australia" />
-  <button type="submit">Add place</button>
+<form class="add-stuff" method="post">
+
+    <div class="form-pair">
+      <label>Place name</label>
+      <input required type="text" name="place_new" placeholder="brisbane, queensland" />
+    </div>
+
+    <div class="form-pair">
+      <label>Country (optional)</label>
+      <input type="text" name="country_new" placeholder="australia" />
+    </div>
+
+    <div class="form-pair">
+      <label>From date (optional)</label>
+      <input type="text" name="start_date_new" placeholder="2026-01-04" />
+    </div>
+
+    <div class="form-pair">
+      <label>To date (optional)</label>
+      <input type="text" name="end_date_new" placeholder="2026-02-27" />
+    </div>
+
+  <button type="submit">Do it</button>
+
 </form>
 
 <h3 class="personal-space">Shapes</h3>
 
+<!-- TODO show blank "" instead of None, e.g. for Category -->
 <table class="table">
   <thead>
     <th>Name</th>
@@ -60,17 +85,20 @@
   <tbody>
     {% for shape in shapes %}
     <tr>
-      {# {% for i in range(1, 5) %} #} {#
-      <td>{{ shape[i] }}</td>
-      #}
       <td>{{ shape[1] }}</td>
       <td>{{ shape[2] }}</td>
       <td>{{ shape[5] }}</td>
       <td>{{ shape[6] }}</td>
       <td>{{ shape[7] }}</td>
-      {# {% endfor %} #}
+      {# 
+      <td>{{ shape["name"] }}</td>
+      <td>{{ shape["type"] }}</td>
+      <td>{{ shape["place_id"] }}</td>
+      <td>{{ shape["category"] }}</td>
+      <td>{{ shape["notes"] }}</td>
+      #}
       <td>
-        <form action="/delete" method="post">
+        <form action="/deleteplace" method="post">
           <input type="hidden" name="shape_id" value="{{ shape[0] }}" />
           <button type="submit" onclick="return confirm('Delete this shape?')">
             Remove
@@ -83,6 +111,7 @@
 </table>
 
 <h4 class="personal-space">Add a shape</h4>
+
 <!-- TODO: hide form input until button is clicked -->
 <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
 <form class="add-stuff" action="/drawshape" method="post">
@@ -114,10 +143,11 @@
   
   <div class="form-pair">
     <label>Parent place ID (optional)</label>
-    <select name="parent_place_id" />
-    <option selected disabled>optional</option>
+    <!-- TODO ensure this behaves properly as optional -->
+    <select name="shape_parent_place_id" />
+    <option selected disabled></option>
     {% for place in places %}
-    <option value="point">Point</option>
+    <option>{{ place[1] }}</option>
     {% endfor %}
   </select>
 </div>
@@ -132,7 +162,7 @@
     <input type="text" name="notes" placeholder="recommended by Mo" />
   </div>
 
-  <button type="submit">Create shape</button>
+  <button type="submit">Do it</button>
 </form>
 
 <script>
@@ -157,8 +187,6 @@
 
       // "Make sure all the code is called after the div and leaflet.js inclusion" (taken care of in layout.html)
 
-      // TODO migrate test.geojson to db init
-
       // add each place to map
       {% for place in places %}
         // L.marker([xCoord, yCoord]).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
@@ -166,13 +194,13 @@
         L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");  //bindPopup() here just shows the place name
       {% endfor %}
 
-      // TODO: why aren't my shapes showing on map?
       // add each shape to map
       {% for shape in shapes %}
         // L.geoJSON(geometry?).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
         L.geoJSON({{ shape[3] | tojson }}, {
           style: {
-            color: "{{ shape[4] }}"
+            color: "{{ shape[4] }}",
+            fillOpacity: 0  // remove shading from polygons
           }
         })
         .addTo(map)

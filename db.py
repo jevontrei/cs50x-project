@@ -27,7 +27,14 @@ def init_db():
                 INSERT OR IGNORE INTO places (name, country, lat, long, start_date, end_date)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (place["name"], place["country"], place["lat"], place["long"], place.get("start_date"), place.get("end_date")),
+                (
+                    place["name"],
+                    place["country"],
+                    place["lat"],
+                    place["long"],
+                    place.get("start_date"),
+                    place.get("end_date"),
+                ),
             )
 
     # create shapes table
@@ -53,14 +60,17 @@ def init_db():
         for shape in shape_seeds:
             con.execute(
                 """
-                INSERT INTO shapes (name, type, geometry, color)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO shapes (name, type, geometry, color, place_id, category, notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                  """,
                 (
                     shape["name"],
                     shape["type"],
                     json.dumps(shape["geometry"]),  # Convert dict back to JSON string
                     shape["color"],
+                    shape.get("place_id"),
+                    shape.get("category"),
+                    shape.get("notes"),
                 ),
             )
 
