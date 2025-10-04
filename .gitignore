@@ -214,3 +214,7 @@ uv.lock
 
 # scratch file/s
 scratch.js
+
+# personal stuff
+/private
+maps_actual.db

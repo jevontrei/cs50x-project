@@ -1,24 +1,98 @@
 
-# Mapsing
+# 2025 CS50x Final Project: Mapsing
 
-## Video Demo:  <URL HERE>
+Author: Joel von Treifeldt
 
-## Description:
+## Video Demo:  https://...
 
-TODO: 
-- add points with notes (e.g. a restaurant or forest we'd like to visit)
+## TODO
+- add POI with notes (e.g. a restaurant or forest we'd like to visit)
 - add place re-ordering
-- 
+-
 
-### PLACES and SHAPES
+## Tech / resources used
 
-Places:
--  major places we are visiting (cities)
--  
+- Python/Flask, for the backend
+- JavaScript/HTML/CSS/Bootstrap, for the frontend
+- SQLite, for the database
+- Jinja, for templating
+- Open Street Maps
+- Leaflet.js, to get Open Street Maps happening
+- Leaflet.draw, to enable drawing shapes on the map
+- Nominatim, for searching for coordinates using place names
+- haversine, for calculating the distance between two places
+- uv, for environment management
+- git, for version control
+- Claude AI, for learning
 
-Shapes:
--  sub-places
--  points of interest
--  routes between places
--  points, lines, polygons
--  
+## Description
+
+Mapsing is a simple project that uses Open Street Maps (via Leaflet.js) to create an interactive website for mapping purposes, optionally as a travel itinerary. Mapsing mostly takes place on one page. The basic functionality is based on places and shapes.
+
+### Places
+
+Places are major locations or destinations (usually cities). Places can be points only (no linestrings or polygons). 
+
+By default, several shapes are seeded into the database by `init_db()`. The `places` SQLite table is the parent table to `shapes`. 
+
+Places can be added using the simple form, which uses Nominatim to geocode, i.e. search coordinates by place name.
+
+### Shapes
+
+Shapes are like sub-places. They are points of interest, or routes between places, etc. They can be points, lines, or polygons. 
+
+Similarly to places, several shapes are seeded into the database by `init_db()`. The `shapes` table in the database is the child/foreign-key table to the `places` table. 
+
+The user can draw shapes into the map using Leaflet.draw. 
+
+### OSM
+
+### Leaflet.js and Leaflet.draw
+
+A map is 
+
+### Nominatim
+
+Search
+
+### Distance calculator
+
+There is also a distance calculator page, which simply takes two places and returns the distance between them. Since the Earth is a sphere, I use the "haversine distance", i.e. the distance between two points around a sphere's surface
+
+---
+
+## Routes
+
+`/`
+
+`/deleteplace`
+
+`/deleteshape`
+
+`/drawshape`
+
+`/saveshape`
+
+`/distance`
+
+`/distanced`
+
+---
+
+## How To
+
+Ensure you have the `maps.db` file. If not, run:
+```bash
+sqlite3 maps.db
+```
+
+And ensure you have `uv` installed! Now initialise your database:
+
+```bash
+# Create tables and seed data
+uv run python db.py        
+
+# When you need fresh start
+uv run python db_reset.py  
+```
+

@@ -1,37 +1,20 @@
-import click
 import json
 import requests
 import sqlite3
 import time
 from haversine import haversine
-from datetime import datetime
-from db import init_db
 from flask import (
     Flask,
-    flash,
     redirect,
     render_template,
     request,
-    session,
-    g,
-    current_app,
 )
 
 """
-TODO: 
-- add/make/draw shapes
-- add points with notes (e.g. a restaurant or forest we'd like to visit)
-- add "start line"
-- add dates to places
-- add place re-ordering
-
-
 ## DB operations
 ## don't run these in this script; just run the commands in the terminal
 ## uv run python db.py        # Create tables and seed data
 ## uv run python db_reset.py  # When you need fresh start
-
-
 """
 
 app = Flask(__name__)
@@ -39,6 +22,7 @@ app = Flask(__name__)
 DATABASE = "maps.db"
 
 
+# delet?
 ## TODO move this fn (or just the code) inside drawshape route?
 def build_geojson(shape_id):
     row = con.execute(
@@ -258,6 +242,3 @@ def distance():
         return render_template("distance.html", places=places)
 
 
-# @app.route("/itinerary")
-# def itinerary():
-#     ...
