@@ -35,12 +35,13 @@ page for drawing stuff on map, then save to db and redirect back to index with n
   document.addEventListener("DOMContentLoaded", function () {
     try {
       // create leaflet map
-      let map = L.map('map').setView([-27.47, 153.03], 10);
+      let map = L.map("map").setView([-27.47, 153.03], 10);
 
       // add map to page
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         // maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
       // TODO add places to map (shapes already added somehow?)
@@ -50,30 +51,32 @@ page for drawing stuff on map, then save to db and redirect back to index with n
 
       // don't need an event listener; L.Control.Draw() takes care of it
       let drawControl = new L.Control.Draw({
-      edit: { featureGroup: drawnItems },
-      draw: {
-        polygon: {{ 'true' if shape_type == 'polygon' else 'false' }},
-        polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
-        rectangle: {{ 'true' if shape_type == 'rectangle' else 'false' }},
-        circle: false,
-        marker: false
-      }
+        edit: { featureGroup: drawnItems },
+        draw: {
+          polygon: {{ 'true' if shape_type == 'polygon' else 'false' }},
+          polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
+          rectangle: false, // {{ 'true' if shape_type == 'rectangle' else 'false' }},
+          circle: false,
+          marker: false, // TODO rethink which tool i want to use for point shapes
+          circlemarker: {{ 'true' if shape_type == 'point' else 'false' }},
+        },
       });
       map.addControl(drawControl);
       // TODO: comment/understand all this
-      map.on('draw:created', function(e) {
+      map.on("draw:created", function (e) {
         let layer = e.layer;
         drawnItems.addLayer(layer);
 
         // Extract geometry and enable save button
         let geometry = layer.toGeoJSON().geometry;
-        document.getElementById('geometryInput').value = JSON.stringify(geometry);
-        document.getElementById('saveBtn').disabled = false;
+        document.getElementById("geometryInput").value =
+          JSON.stringify(geometry);
+        document.getElementById("saveBtn").disabled = false;
       });
     } catch (error) {
-      console.error("Map error:", error)
+      console.error("Map error:", error);
     }
-  })
+  });
 </script>
 
 {% endblock %}

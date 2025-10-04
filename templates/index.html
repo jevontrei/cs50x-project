@@ -27,7 +27,7 @@
       <td>{{ place[i] }}</td>
       {% endfor %}
       <td>
-        <form action="/deleteshape" method="post">
+        <form action="/deleteplace" method="post">
           <input type="hidden" name="place_id" value="{{ place[0] }}" />
           <button type="submit" onclick="return confirm('Delete this place?')">
             Remove
@@ -43,7 +43,7 @@
 
 <!-- <div class="add-stuff">
 </div> -->
-<!-- i think i need to add action="addplace" but then will need to fix app.py -->
+<!-- i think i need to add action="/addplace" but then will need to fix app.py -->
 <form class="add-stuff" method="post">
 
     <div class="form-pair">
@@ -98,7 +98,7 @@
       <td>{{ shape["notes"] }}</td>
       #}
       <td>
-        <form action="/deleteplace" method="post">
+        <form action="/deleteshape" method="post">
           <input type="hidden" name="shape_id" value="{{ shape[0] }}" />
           <button type="submit" onclick="return confirm('Delete this shape?')">
             Remove
@@ -117,7 +117,7 @@
 <form class="add-stuff" action="/drawshape" method="post">
 
   <div class="form-pair">
-    <label>Name</label>
+    <label>Shape name</label>
     <input
     required
     type="text"
@@ -126,10 +126,10 @@
     />
   </div>
   
+  <!-- do i need value="point" here? -->
   <div class="form-pair">
     <label>Shape type</label>
     <select required name="shape_type">
-      <!-- do i need value="point" here? -->
       <option selected value="point">Point</option>
       <option value="linestring">Linestring</option>
       <option value="polygon">Polygon</option>
@@ -147,19 +147,19 @@
     <select name="shape_parent_place_id" />
     <option selected disabled></option>
     {% for place in places %}
-    <option>{{ place[1] }}</option>
+    <option value="{{ place[0] }}">{{ place[1] }}</option>
     {% endfor %}
   </select>
 </div>
 
 <div class="form-pair">
     <label>Category (optional)</label>
-    <input type="text" name="category" placeholder="restaurant" />
+    <input type="text" name="shape_category" placeholder="restaurant" />
   </div>
 
   <div class="form-pair">
     <label>Notes (optional)</label>
-    <input type="text" name="notes" placeholder="recommended by Mo" />
+    <input type="text" name="shape_notes" placeholder="recommended by Mo" />
   </div>
 
   <button type="submit">Do it</button>

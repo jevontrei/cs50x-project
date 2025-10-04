@@ -133,10 +133,8 @@ def index():
         con.close()
 
         return redirect("/")
-        # return render_template("index.html", places=places)
 
 
-# TODO remove button not working
 @app.route("/deleteplace", methods=["POST"])
 def deleteplace():
     place_id = request.form.get("place_id")
@@ -149,7 +147,6 @@ def deleteplace():
     return redirect("/")
 
 
-# TODO remove button not working
 @app.route("/deleteshape", methods=["POST"])
 def deleteshape():
     shape_id = request.form.get("shape_id")
@@ -165,7 +162,6 @@ def draw_shape():
     shape_name = request.form.get("shape_name")
     shape_type = request.form.get("shape_type")
     shape_color = request.form.get("shape_color")
-    # geometry = request.form.get("geometry")?
     shape_parent_place_id = request.form.get("shape_parent_place_id")
     shape_category = request.form.get("shape_category")
     shape_notes = request.form.get("shape_notes")
@@ -183,7 +179,6 @@ def draw_shape():
         shape_parent_place_id=shape_parent_place_id,
         shape_category=shape_category,
         shape_notes=shape_notes,
-        # geometry=geometry,?
     )
 
 
