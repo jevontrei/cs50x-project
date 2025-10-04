@@ -20,9 +20,11 @@ def init_db():
                 )
                 """)
     # seed places
-    # with open("static/seedPlaces.json", "r") as f:
-    # TODO: delete this when submitting project
-    with open("static/seedPlacesActual.json", "r") as f:
+    seed_places_filename = "static/seedPlaces.json"
+    # TODO: delete this when submitting project:
+    seed_places_filename = "static/seedPlacesActual.json"
+    with open(seed_places_filename, "r") as f:
+    # with open("static/seedPlacesActual.json", "r") as f:
         place_seeds = json.load(f)
         for place in place_seeds:
             con.execute(
@@ -56,11 +58,11 @@ def init_db():
                 """)
 
     # seed shapes
-    # with open("static/seedShapes.json", "r") as f:
-    # TODO: delete this when submitting project
-    with open("static/seedShapesActual.json", "r") as f:
+    seed_shapes_filename = "static/seedShapes.json"
+    # TODO: delete this when submitting project:
+    seed_shapes_filename = "static/seedShapesActual.json"
+    with open(seed_shapes_filename, "r") as f:
         shape_seeds = json.load(f)
-        # TODO: find if/where "Brisbane line" is appearing on the map
         # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         for shape in shape_seeds:
             con.execute(

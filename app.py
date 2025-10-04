@@ -19,8 +19,8 @@ from flask import (
 
 app = Flask(__name__)
 
-# DATABASE = "maps.db"
-# TODO: delete this when submitting project
+DATABASE = "maps.db"
+# TODO: delete this when submitting project:
 DATABASE = "maps_actual.db"
 
 
@@ -81,7 +81,6 @@ def index():
         place_names = dict()
         for place in places:
             place_names[place[0]] = place[1]
-        print(place_names)
 
         # Convert tuples to lists and parse geometry
         shapes = [list(shape) for shape in shapes]

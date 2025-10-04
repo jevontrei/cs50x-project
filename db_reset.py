@@ -1,6 +1,6 @@
-import sqlite3
-from db import init_db
 from app import DATABASE
+from db import init_db
+import sqlite3
 
 
 def reset_db():
@@ -10,7 +10,7 @@ def reset_db():
     con.execute("DROP TABLE IF EXISTS places")
     con.close()
 
-    # then call init_db()
+    # then call the regular init fn
     init_db()
 
 

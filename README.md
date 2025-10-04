@@ -11,6 +11,7 @@ Author: Joel von Treifeldt
 - responsive design - mobile!
 - seeded shapes data has hard-coded place_id FKs; this will break - redesign it!
 - figure out env/flaskenv (environment variables)
+- add zoom to shape/place functionality
 
 ## Tech / resources used
 
