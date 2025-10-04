@@ -19,7 +19,9 @@ from flask import (
 
 app = Flask(__name__)
 
-DATABASE = "maps.db"
+# DATABASE = "maps.db"
+# TODO: delete this when submitting project
+DATABASE = "maps_actual.db"
 
 
 # delet?

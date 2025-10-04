@@ -1,9 +1,10 @@
 import json
 import sqlite3
+from app import DATABASE
 
 
 def init_db():
-    con = sqlite3.connect("maps.db")
+    con = sqlite3.connect(DATABASE)
 
     # create places table
     # don't need "autoincrement" for PKs in sqlite
@@ -19,7 +20,9 @@ def init_db():
                 )
                 """)
     # seed places
-    with open("static/seedPlaces.json", "r") as f:
+    # with open("static/seedPlaces.json", "r") as f:
+    # TODO: delete this when submitting project
+    with open("static/seedPlacesActual.json", "r") as f:
         place_seeds = json.load(f)
         for place in place_seeds:
             con.execute(
@@ -53,7 +56,9 @@ def init_db():
                 """)
 
     # seed shapes
-    with open("static/seedShapes.json", "r") as f:
+    # with open("static/seedShapes.json", "r") as f:
+    # TODO: delete this when submitting project
+    with open("static/seedShapesActual.json", "r") as f:
         shape_seeds = json.load(f)
         # TODO: find if/where "Brisbane line" is appearing on the map
         # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long

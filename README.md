@@ -10,6 +10,7 @@ Author: Joel von Treifeldt
 - add place re-ordering
 - responsive design - mobile!
 - seeded shapes data has hard-coded place_id FKs; this will break - redesign it!
+- figure out env/flaskenv (environment variables)
 
 ## Tech / resources used
 
@@ -76,12 +77,12 @@ Search
 
 ## How To
 
-Ensure you have sqlite3 installed. Create the `maps.db` file:
+Ensure you have `uv` and `sqlite3` installed. Create the `maps.db` file if necessary:
 ```bash
 sqlite3 maps.db
 ```
 
-And ensure you have `uv` installed! Now initialise your database:
+Now initialise your database with the boilerplate seed data:
 
 ```bash
 # Create tables and seed data
