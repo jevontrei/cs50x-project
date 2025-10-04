@@ -23,6 +23,7 @@ Author: Joel von Treifeldt
 - haversine, for calculating the distance between two places
 - uv, for environment management
 - git, for version control
+- Netlify, for deploying the site
 - Claude AI, for learning
 
 ## Description
@@ -35,7 +36,7 @@ Places are major locations or destinations (usually cities). Places can be point
 
 By default, several shapes are seeded into the database by `init_db()`. The `places` SQLite table is the parent table to `shapes`. 
 
-Places can be added using the simple form, which uses Nominatim to geocode, i.e. search coordinates by place name.
+Places can be added with a simple form, which uses Nominatim to geocode, i.e. search coordinates by place name.
 
 ### Shapes
 
