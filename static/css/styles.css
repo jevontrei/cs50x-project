@@ -29,18 +29,28 @@ body {
   padding: 24px;
 }
 
+h3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 h4 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .add-stuff-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px;
-  width: 1000px;
+  align-items: center;
+  padding: 24px 64px;
+  /* width: 1000px; */
+  width: 100%;
 }
 
 .add-stuff {
@@ -80,8 +90,20 @@ select {
   padding: 6px;
 }
 
-.form-pair {
+.form-row {
   margin: 6px;
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
+  max-width: ;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+footer {
   display: flex;
   justify-content: center;
 }

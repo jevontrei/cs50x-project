@@ -9,6 +9,7 @@ Author: Joel von Treifeldt
 - add POI with notes (e.g. a restaurant or forest we'd like to visit)
 - add place re-ordering
 - responsive design - mobile!
+- seeded shapes data has hard-coded place_id FKs; this will break - redesign it!
 
 ## Tech / resources used
 

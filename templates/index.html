@@ -50,27 +50,27 @@
     
     <form class="add-stuff-form" method="post">
       
-      <div class="form-pair">
+      <div class="form-row">
         <label>Place name</label>
         <input required type="text" name="place_new" placeholder="brisbane, queensland" />
       </div>
       
-      <div class="form-pair">
+      <div class="form-row">
         <label>Country (optional)</label>
         <input type="text" name="country_new" placeholder="australia" />
       </div>
     
-    <div class="form-pair">
+    <div class="form-row">
         <label>From date (optional)</label>
         <input type="text" name="start_date_new" placeholder="2026-01-04" />
       </div>
       
-      <div class="form-pair">
+      <div class="form-row">
         <label>To date (optional)</label>
         <input type="text" name="end_date_new" placeholder="2026-02-27" />
       </div>
       
-      <button type="submit">Do it</button>
+      <button class="form-row" type="submit">Do it</button>
       
     </form>
   </div>
@@ -118,7 +118,7 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden -->
     <form class="add-stuff-form" action="/drawshape" method="post">
       
-      <div class="form-pair">
+      <div class="form-row">
         <label>Shape name</label>
         <input
         required
@@ -129,7 +129,7 @@
       </div>
       
       <!-- do i need value="point" here? -->
-      <div class="form-pair">
+      <div class="form-row">
       <label>Shape type</label>
       <select required name="shape_type">
         <option selected value="point">Point</option>
@@ -138,12 +138,12 @@
       </select>
     </div>
     
-    <div class="form-pair">
+    <div class="form-row">
       <label>Color (optional)</label>
       <input required type="text" name="shape_color" value="blue" placeholder="blue" />
     </div>
     
-    <div class="form-pair">
+    <div class="form-row">
       <label>Parent place ID (optional)</label>
       <!-- TODO ensure this behaves properly as optional -->
       <select name="shape_parent_place_id" />
@@ -154,17 +154,17 @@
     </select>
   </div>
   
-  <div class="form-pair">
+  <div class="form-row">
     <label>Category (optional)</label>
     <input type="text" name="shape_category" placeholder="restaurant" />
   </div>
   
-  <div class="form-pair">
+  <div class="form-row">
     <label>Notes (optional)</label>
     <input type="text" name="shape_notes" placeholder="recommended by Mo" />
   </div>
   
-  <button type="submit">Do it</button>
+  <button class="form-row" type="submit">Do it</button>
 </form>
 </div>
 </div>
