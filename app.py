@@ -2,7 +2,6 @@ import json
 import requests
 import sqlite3
 import time
-from haversine import haversine
 from flask import (
     Flask,
     redirect,
@@ -11,10 +10,9 @@ from flask import (
 )
 
 """
-## DB operations
-## don't run these in this script; just run the commands in the terminal
-## uv run python db.py        # Create tables and seed data
-## uv run python db_reset.py  # When you need fresh start
+DB operations to run in the terminal:
+uv run python db.py        # Create tables and seed data
+uv run python db_reset.py  # When you need fresh start
 """
 
 app = Flask(__name__)

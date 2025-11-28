@@ -3,6 +3,30 @@
 
 Author: Joel von Treifeldt
 
+## How To
+
+Ensure you have `uv` and `sqlite3` installed. Create the `maps.db` file:
+```sh
+sqlite3 maps.db
+```
+
+Now initialise your database with the boilerplate seed data:
+
+```sh
+# Create tables and seed data
+uv run python db.py        
+
+# Run this when you need fresh start
+uv run python db_reset.py  
+```
+
+Run the app:
+
+```sh
+# how this different to flask run?
+uv run flask --app app.py --debug run
+```
+
 ## Video Demo:  https://...
 
 ## TODO
@@ -12,6 +36,8 @@ Author: Joel von Treifeldt
 - seeded shapes data has hard-coded place_id FKs; this will break - redesign it!
 - figure out env/flaskenv (environment variables)
 - add zoom to shape/place functionality
+- show all shapes and places in drawshape.html
+- 
 
 ## Tech / resources used
 
@@ -19,7 +45,7 @@ Author: Joel von Treifeldt
 - JavaScript/HTML/CSS/Bootstrap, for the frontend
 - SQLite, for the database
 - Jinja, for templating
-- Open Street Maps
+- Open Street Maps, for maps
 - Leaflet.js, to get Open Street Maps happening
 - Leaflet.draw, to enable drawing shapes on the map
 - Nominatim, for searching for coordinates using place names
@@ -30,7 +56,7 @@ Author: Joel von Treifeldt
 
 ## Description
 
-Mapsing is a simple project that uses Open Street Maps (via Leaflet.js) to create an interactive website for mapping purposes, optionally as a travel itinerary. Mapsing mostly takes place on one page. The basic functionality is based on places and shapes.
+Mapsing is a simple project that mostly takes place on one page. It uses Open Street Maps (via Leaflet.js) to create an interactive website for mapping purposes. It was mostly designed as a travel itinerary planning tool. The basic functionality is based on places and shapes:
 
 ### Places
 
@@ -73,23 +99,4 @@ Search
 
 `/saveshape`
 
-
----
-
-## How To
-
-Ensure you have `uv` and `sqlite3` installed. Create the `maps.db` file if necessary:
-```bash
-sqlite3 maps.db
-```
-
-Now initialise your database with the boilerplate seed data:
-
-```bash
-# Create tables and seed data
-uv run python db.py        
-
-# When you need fresh start
-uv run python db_reset.py  
-```
 

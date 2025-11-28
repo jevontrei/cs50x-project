@@ -224,3 +224,4 @@ test.geojson
 loadTestGeojson.js
 seedPlacesActual.json
 seedShapesActual.json
+noteToSelf.md
