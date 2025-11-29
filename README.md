@@ -68,7 +68,7 @@ https://...
 - `Netlify`, for deploying the site
 - `Claude AI`, for learning
 
-I chose Python and Flask because they are the tools I am most familiar with, having made very basic web apps before. The JavaScript in this project is minimal - just enough to get the thing working. 
+I chose Python and Flask because they are the tools I am most familiar with, having made very basic web apps before.
 
 Despite Postgres being the only database I had previously worked with (and only to a modest extent), I chose SQLite because it was introduced in CS50x and it seemed simple and approachable. I like that it is just a humble little `.db` file on my computer. Very transparent!
 

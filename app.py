@@ -74,29 +74,28 @@ def index():
         return render_template("index.html", places=places, place_names=place_names, shapes=shapes)
 
     elif request.method == "POST":
+        start_date_new = request.form.get("start_date_new")
+        end_date_new = request.form.get("end_date_new")
         place_new = request.form.get("place_new")
         country_new = request.form.get("country_new")
         query = place_new + ", " + country_new
 
         ## use nominatim to search for lat/lon based on the user's entered place name/s
         ## TODO: error-handle / validate this properly
-        success = False
-        while not success:
-            # try:
+        try:
             latlon = geocode_place(query)
-            if latlon:
-                success = True
-            # except TypeError as e:
-                # print("error!", e)
+        except TypeError as e:
+            print("error!", e)
         
         ## validate output
         # if not latlon:
+            # return ...
 
         con = sqlite3.connect(DATABASE)
         ## pay attention to lat/long order!! geojson use long/lat, while leaflet uses lat/long
         places = con.execute(
-            "insert into places (name, country, lat, long) values (?, ?, ?, ?)",
-            (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2)),
+            "insert into places (name, country, lat, long, start_date, end_date) values (?, ?, ?, ?, ?, ?)",
+            (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2), start_date_new, end_date_new),
         )
         con.commit()  # write changes to file/disk
         con.close()
