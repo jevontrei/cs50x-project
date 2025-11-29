@@ -1,14 +1,12 @@
-"""
-Do I even need this?
-"""
-
-
 from app import DATABASE
 from db import init_db
 import sqlite3
 
 
 def reset_db():
+    """
+    Delete database tables and start fresh
+    """
     con = sqlite3.connect(DATABASE)
 
     con.execute("DROP TABLE IF EXISTS shapes")

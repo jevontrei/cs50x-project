@@ -44,12 +44,11 @@ page for drawing stuff on map, then save to db and redirect back to index with n
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      // TODO add places to map (shapes already added somehow?)
-
       let drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
 
       // don't need an event listener; L.Control.Draw() takes care of it
+      // Claude AI helped with much of this
       let drawControl = new L.Control.Draw({
         edit: { featureGroup: drawnItems },
         draw: {
@@ -57,12 +56,13 @@ page for drawing stuff on map, then save to db and redirect back to index with n
           polyline: {{ 'true' if shape_type == 'linestring' else 'false' }},
           rectangle: false, // {{ 'true' if shape_type == 'rectangle' else 'false' }},
           circle: false,
-          marker: false, // TODO rethink which tool i want to use for point shapes
+          marker: false, // TODO rethink which tool to use for point shapes
           circlemarker: {{ 'true' if shape_type == 'point' else 'false' }},
         },
       });
       map.addControl(drawControl);
-      // TODO: comment/understand all this
+
+      // when the map has been drawn on, get the layer that was just drawn and add it to the map
       map.on("draw:created", function (e) {
         let layer = e.layer;
         drawnItems.addLayer(layer);

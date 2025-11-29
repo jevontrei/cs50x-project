@@ -6,8 +6,8 @@ from app import DATABASE
 def init_db():
     con = sqlite3.connect(DATABASE)
 
-    # create places table
-    # don't need "autoincrement" for PKs in sqlite
+    ## create places table
+    ## don't need "autoincrement" for PKs in sqlite
     con.execute("""
                 create table if not exists places (
                     id integer primary key,
@@ -19,12 +19,9 @@ def init_db():
                     end_date
                 )
                 """)
-    # seed places
-    seed_places_filename = "static/seedPlaces.json"
-    # TODO: delete this when submitting project:
-    seed_places_filename = "static/seedPlacesActual.json"
+    ## seed places
+    seed_places_filename = "static/seedPlaces.json" # for personal use, use "static/seedPlacesActual.json" instead
     with open(seed_places_filename, "r") as f:
-    # with open("static/seedPlacesActual.json", "r") as f:
         place_seeds = json.load(f)
         for place in place_seeds:
             con.execute(
@@ -42,7 +39,7 @@ def init_db():
                 ),
             )
 
-    # create shapes table
+    ## create shapes table
     con.execute("""
                 CREATE TABLE if not exists shapes (
                 id INTEGER PRIMARY KEY,
@@ -57,13 +54,11 @@ def init_db():
                 )
                 """)
 
-    # seed shapes
-    seed_shapes_filename = "static/seedShapes.json"
-    # TODO: delete this when submitting project:
-    seed_shapes_filename = "static/seedShapesActual.json"
+    ## seed shapes
+    seed_shapes_filename = "static/seedShapes.json" # for personal use, use "static/seedShapesActual.json" instead
     with open(seed_shapes_filename, "r") as f:
         shape_seeds = json.load(f)
-        # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
+        ## pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         for shape in shape_seeds:
             con.execute(
                 """

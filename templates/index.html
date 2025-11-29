@@ -42,9 +42,7 @@
   </table>
 
 
-  <!-- <div class="add-place"> -->
   <div class="add-stuff">
-
     
     <h4 class="personal-space">Add a place</h4>
    
@@ -111,7 +109,6 @@
   </tbody>
   </table>
 
-  <!-- <div class="add-shape"> -->
   <div class="add-stuff">
 
     <h4 class="personal-space">Add a shape</h4>
@@ -147,8 +144,7 @@
     
     <div class="form-row">
       <label>Parent place ID (optional)</label>
-      <!-- TODO ensure this behaves properly as optional -->
-      <select name="shape_parent_place_id" />
+      <select name="shape_parent_place_id" >
       <option selected disabled></option>
       {% for place in places %}
       <option value="{{ place[0] }}">{{ place[1] }}</option>
@@ -172,20 +168,19 @@
 </div>
 
 <script>
-  // the "DOMContentLoaded" listener waits for ALL divs to be created before running the js, no matter where the script is
+  // Claude AI: the "DOMContentLoaded" listener waits for ALL divs to be created before running the js, no matter where the script is
   document.addEventListener("DOMContentLoaded", function () {
     try {
       // initialise leaflet map
       // L is the "global Leaflet namespace object"
-      // var map = L.map(idOfMapDiv).setView([viewCoords], zoomLevel);
-      // use let instead of var?
-      var map = L.map("map").setView([-27.4698, 153.0251], 10);  // TODO: initialise map to user's IP location
+      // usage: let  map = L.map(idOfMapDiv).setView([viewCoords], zoomLevel);
+      let map = L.map("map").setView([-27.4, 153.0], 10);  // TODO: dynamically initialise map to user's IP location
       
       // actually add map
       // most tile servers require attribution (including OSM)
       // url template becomes e.g. https://a.tile.openstreetmap.org/10/512/256.png
       // {s} = a, b, or c for load balancing; {z} = zoom level, {x}/{y} = coords
-      // L.tileLayer("TileLayerUrlTemplate", {attribution: 'copyrightStuff'}).addTo(map);
+      // usage: L.tileLayer("TileLayerUrlTemplate", {attribution: 'copyrightStuff'}).addTo(map);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         // maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -195,18 +190,18 @@
 
       // add each place to map
       {% for place in places %}
-        // L.marker([xCoord, yCoord]).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
+        // usage: L.marker([xCoord, yCoord]).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
         // pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         L.marker([{{ place[3] }}, {{ place[4] }}]).addTo(map).bindPopup("{{ place[1] }}");  //bindPopup() here just shows the place name
       {% endfor %}
 
       // add each shape to map
       {% for shape in shapes %}
-        // L.geoJSON(geometry?).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
+        // usage: L.geoJSON(geometry?).addTo(map).bindPopup(thingToShowWhenFeatureClicked);
         L.geoJSON({{ shape[3] | tojson }}, {
           style: {
             color: "{{ shape[4] }}",
-            fillOpacity: 0  // remove shading from polygons
+            fillOpacity: 0.2  // adjust polygon shading
           }
         })
         .addTo(map)

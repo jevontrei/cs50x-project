@@ -1,8 +1,6 @@
 
 # 2025 CS50x Final Project: Mapsing
 
-Author: Joel von Treifeldt
-
 https://github.com/jevontrei/cs50x-project
 
 ---
@@ -107,6 +105,10 @@ The user can draw shapes into the map using `Leaflet.draw`.
 ### `app.py`
 
 This is the central script of the project. It creates an instance of a Flask app, and defines a function for geocoding (searching coordinates by place name) places, and defines all of our routes.
+
+### `main.py`
+
+Created when the `uv` project is initialised, but not used beyond that.
 
 ### `db.py`
 
@@ -233,6 +235,8 @@ For POST requests, to remove a shape from the database.
 ---
 
 ## Future TODOs
+
+Note: TODOs are scattered through the code. This is intentional, as I expect to keep working on this project after submission.
 
 - Add place re-ordering
 

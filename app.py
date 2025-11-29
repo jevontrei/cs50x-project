@@ -17,10 +17,7 @@ uv run python db_reset.py  # When you need fresh start
 
 app = Flask(__name__)
 
-DATABASE = "maps.db"
-# TODO: delete this when submitting project:
-# DATABASE = "maps_actual.db"
-
+DATABASE = "maps.db"  # for personal use, use "maps_actual.db" instead
 
 ## Claude AI suggested using Nominatim for geocoding
 def geocode_place(place_name):
@@ -36,7 +33,11 @@ def geocode_place(place_name):
     """
     url = "https://nominatim.openstreetmap.org/search"
     params = {"q": place_name, "format": "json", "limit": 1}
-    headers = {"User-Agent": "Mapsing/1.0"}  # TODO: check/understand this
+    
+    ## "Provide a valid HTTP Referer or User-Agent identifying the application" 
+    ## - https://operations.osmfoundation.org/policies/nominatim/
+    ## - https://stackoverflow.com/questions/10606133/sending-user-agent-using-requests-library-in-python
+    headers = {"User-Agent": "Mapsing/1.0"}  
 
     response = requests.get(url, params=params, headers=headers)
     time.sleep(
@@ -60,12 +61,12 @@ def index():
         shapes = con.execute("select * from shapes").fetchall()
         con.close()
         
-        # make a dict of place names to use in the index.html Places table (via foreign keys)
+        ## make a dict of place names to use in the index.html Places table (via foreign keys)
         place_names = dict()
         for place in places:
             place_names[place[0]] = place[1]
 
-        # Convert tuples to lists and parse geometry
+        ## Convert tuples to lists and parse geometry
         shapes = [list(shape) for shape in shapes]
         for shape in shapes:
             shape[3] = json.loads(shape[3])  # Convert JSON string to dict
@@ -77,21 +78,22 @@ def index():
         country_new = request.form.get("country_new")
         query = place_new + ", " + country_new
 
-        # use nominatim to search for lat/lon based on the user's entered place name/s
-        # TODO: error-handle / validate this properly
+        ## use nominatim to search for lat/lon based on the user's entered place name/s
+        ## TODO: error-handle / validate this properly
         success = False
         while not success:
             # try:
             latlon = geocode_place(query)
             if latlon:
                 success = True
-        # except TypeError as e:
-        # print("error!", e)
-        # validate output
+            # except TypeError as e:
+                # print("error!", e)
+        
+        ## validate output
         # if not latlon:
 
         con = sqlite3.connect(DATABASE)
-        # !pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
+        ## pay attention to lat/long order!! geojson use long/lat, while leaflet uses lat/long
         places = con.execute(
             "insert into places (name, country, lat, long) values (?, ?, ?, ?)",
             (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2)),
@@ -133,10 +135,10 @@ def draw_shape():
     shape_category = request.form.get("shape_category")
     shape_notes = request.form.get("shape_notes")
 
-    # TODO use an enum to validate shape type
+    ## TODO use an enum to validate shape type
     # SHAPE_TYPES = ENUM
     # if shape_type not in SHAPE_TYPES:
-    # return ...?
+        # return ...?
 
     return render_template(
         "drawshape.html",
