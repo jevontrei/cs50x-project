@@ -19,23 +19,10 @@ app = Flask(__name__)
 
 DATABASE = "maps.db"
 # TODO: delete this when submitting project:
-DATABASE = "maps_actual.db"
+# DATABASE = "maps_actual.db"
 
 
-# delet?
-## TODO move this fn (or just the code) inside drawshape route?
-def build_geojson(shape_id):
-    row = con.execute(
-        "SELECT name, color, geometry FROM shapes WHERE id=?", (shape_id,)
-    ).fetchone()
-
-    return {
-        "type": "Feature",
-        "properties": {"name": row[0], "color": row[1]},
-        "geometry": json.loads(row[2]),  # Just the geometry part
-    }
-
-
+## Claude AI suggested using Nominatim for geocoding
 def geocode_place(place_name):
     """
     Get lat/lon for a place by name ("Nominatim"), AKA geocoding
@@ -49,9 +36,7 @@ def geocode_place(place_name):
     """
     url = "https://nominatim.openstreetmap.org/search"
     params = {"q": place_name, "format": "json", "limit": 1}
-    headers = {"User-Agent": "Mapsing/1.0"}  # check/understand this
-
-    # TODO: add error handling bc if you search nonsense, it will crash. TypeError
+    headers = {"User-Agent": "Mapsing/1.0"}  # TODO: check/understand this
 
     response = requests.get(url, params=params, headers=headers)
     time.sleep(
@@ -75,7 +60,7 @@ def index():
         shapes = con.execute("select * from shapes").fetchall()
         con.close()
         
-        # make a dict of place names to use in the index.html Places table (via FKs)
+        # make a dict of place names to use in the index.html Places table (via foreign keys)
         place_names = dict()
         for place in places:
             place_names[place[0]] = place[1]
@@ -93,7 +78,7 @@ def index():
         query = place_new + ", " + country_new
 
         # use nominatim to search for lat/lon based on the user's entered place name/s
-        # TODO: figure out how to error-handle / validate this properly
+        # TODO: error-handle / validate this properly
         success = False
         while not success:
             # try:
@@ -105,15 +90,8 @@ def index():
         # validate output
         # if not latlon:
 
-        # TODO: delete? what is this?
-        print(latlon)
-        print(round(latlon[0], 2))
-        print(round(latlon[1], 2))
-        round(latlon[0], 2)
-        round(latlon[1], 2)
-
         con = sqlite3.connect(DATABASE)
-        # pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
+        # !pay attention to lat/long order; geojson use long/lat, while leaflet uses lat/long
         places = con.execute(
             "insert into places (name, country, lat, long) values (?, ?, ?, ?)",
             (place_new, country_new, round(latlon[0], 2), round(latlon[1], 2)),
@@ -183,7 +161,7 @@ def save_shape():
 
     # TODO validate using enum here or in /drawshape?
 
-    shape_geometry = geometry  # TODO this instead: build_geojson(shape_id=)
+    shape_geometry = geometry
 
     con = sqlite3.connect(DATABASE)
     con.execute(

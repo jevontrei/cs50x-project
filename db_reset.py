@@ -1,3 +1,8 @@
+"""
+Do I even need this?
+"""
+
+
 from app import DATABASE
 from db import init_db
 import sqlite3

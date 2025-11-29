@@ -48,7 +48,7 @@ def init_db():
                 id INTEGER PRIMARY KEY,
                 name TEXT,
                 type TEXT,  -- 'point', 'linestring', 'polygon'
-                geometry TEXT,  -- GeoJSON (or rather part thereof? check this)
+                geometry TEXT,  -- GeoJSON (or rather part thereof)
                 color TEXT,
                 place_id INTEGER,  -- optional; links to parent place (city)
                 category TEXT,  -- 'restaurant', 'route', 'area', etc; include this to enable aggregating, e.g. "all our routes added up to 100000 km"
