@@ -13,6 +13,12 @@ Mapsing was mostly designed with travel in mind. I made it for  my partner and I
 
 ---
 
+## Video Demo
+
+https://youtu.be/YNsKtYeGlYo
+
+---
+
 ## How to use Mapsing
 
 Install `uv`:
@@ -44,12 +50,6 @@ Run the app:
 ```sh
 uv run flask --app app.py --debug run
 ```
-
----
-
-## Video Demo
-
-https://...
 
 ---
 
